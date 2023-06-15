@@ -35,3 +35,6 @@ terraform.rc
 
 # lock file
 *.lock.hcl
+
+# example1
+helloworld.txt
