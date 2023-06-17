@@ -36,5 +36,7 @@ terraform.rc
 # lock file
 *.lock.hcl
 
-# example1
+# 예제 실행 결과물
 helloworld.txt
+first.txt
+second.txt
