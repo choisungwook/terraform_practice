@@ -1,0 +1,17 @@
+digraph {
+	compound = "true"
+	newrank = "true"
+	subgraph "root" {
+		"[root] local_file.first (expand)" [label = "local_file.first", shape = "box"]
+		"[root] local_file.second (expand)" [label = "local_file.second", shape = "box"]
+		"[root] local_file.third (expand)" [label = "local_file.third", shape = "box"]
+		"[root] provider[\"registry.terraform.io/hashicorp/local\"]" [label = "provider[\"registry.terraform.io/hashicorp/local\"]", shape = "diamond"]
+		"[root] local_file.first (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/local\"]"
+		"[root] local_file.second (expand)" -> "[root] local_file.first (expand)"
+		"[root] local_file.third (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/local\"]"
+		"[root] provider[\"registry.terraform.io/hashicorp/local\"] (close)" -> "[root] local_file.second (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/local\"] (close)" -> "[root] local_file.third (expand)"
+		"[root] root" -> "[root] provider[\"registry.terraform.io/hashicorp/local\"] (close)"
+	}
+}
+
