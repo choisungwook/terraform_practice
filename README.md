@@ -7,3 +7,4 @@
 * [테라폼코드 실행순서 예제](./dependency/)
 * [vpc 예제](./vpc)
 * [vpc 태그](./vpc_with_tag/)
+* [vpc 변수](./vpc_with_variable/)
