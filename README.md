@@ -8,3 +8,4 @@
 * [vpc 예제](./vpc)
 * [vpc 태그](./vpc_with_tag/)
 * [vpc 변수](./vpc_with_variable/)
+* [vpc 변수와 tfvars파일로 값 초기화](./vpc_tfvars/)
