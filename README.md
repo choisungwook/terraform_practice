@@ -2,6 +2,10 @@
 테라폼 연습
 
 # 목차
-[helloworld](./helloworld/)
-[서브모듈 실행안되는 예제](./ignore_submodule/)
-[테라폼코드 실행순서 예제](./dependency/)
+* [step1. helloworld](./helloworld/)
+* [step2. 서브모듈 실행안되는 예제](./ignore_submodule/)
+* [step3. 테라폼코드 실행순서 예제](./dependency/)
+* [step4. vpc 예제](./vpc)
+* [step5. vpc 태그](./vpc_with_tag/)
+* [step6. vpc 변수](./vpc_with_variable/)
+* [step7. vpc 변수와 tfvars파일로 값 초기화](./vpc_tfvars/)

@@ -7,7 +7,7 @@ terraform {
     }
   }
 
-  required_version = ">= 1.0"
+  required_version = ">= 1.4"
 }
 
 # reference: https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file.html
