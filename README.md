@@ -9,3 +9,4 @@
 * [step5. vpc 태그](./vpc_with_tag/)
 * [step6. vpc 변수](./vpc_with_variable/)
 * [step7. vpc 변수와 tfvars파일로 값 초기화](./vpc_tfvars/)
+* [step8. vpc와 subnet 생성](./vpc_with_subnet/)
