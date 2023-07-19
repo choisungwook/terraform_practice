@@ -40,3 +40,6 @@ terraform.rc
 helloworld.txt
 first.txt
 second.txt
+
+# python venv(for pre-commit)
+venv
