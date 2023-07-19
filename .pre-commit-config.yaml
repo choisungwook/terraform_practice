@@ -4,3 +4,5 @@ repos:
   hooks:
   - id: terraform_fmt
   - id: terraform_tflint
+    args:
+    - "--args=--config=__GIT_WORKING_DIR__/.tflint.hcl"
