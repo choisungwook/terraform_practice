@@ -35,7 +35,7 @@ resource "aws_internet_gateway" "main" {
 }
 
 resource "aws_eip" "nat_gw" {
-  domain   = "vpc"
+  domain = "vpc"
 }
 
 resource "aws_nat_gateway" "main" {
@@ -66,9 +66,9 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route" "igw" {
-  route_table_id            = aws_route_table.public.id
-  destination_cidr_block    = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.main.id
+  route_table_id         = aws_route_table.public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.main.id
 }
 
 resource "aws_route_table_association" "public" {
@@ -79,14 +79,14 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_route" "nat_gw" {
-  route_table_id = aws_route_table.private.id
+  route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id = aws_nat_gateway.main.id
+  nat_gateway_id         = aws_nat_gateway.main.id
 }
 
 resource "aws_route_table_association" "private" {
   for_each = aws_subnet.private
 
-  subnet_id = each.value["id"]
+  subnet_id      = each.value["id"]
   route_table_id = aws_route_table.private.id
 }
