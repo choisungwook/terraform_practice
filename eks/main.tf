@@ -45,4 +45,16 @@ module "eks" {
   private_subnets_ids     = module.vpc.private_subnets_ids
   endpoint_prviate_access = true
   endpoint_public_access  = true
+  managed_node_groups = {
+    "managed-node-group-a" = {
+      node_group_name = "managed-node-group-a",
+      instance_types  = ["t2.micro"],
+      capacity_type   = "ON_DEMAND",
+      release_version = "" #latest
+      disk_size       = 20
+      desired_size    = 1,
+      max_size        = 1,
+      min_size        = 1
+    }
+  }
 }

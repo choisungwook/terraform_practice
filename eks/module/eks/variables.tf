@@ -29,3 +29,16 @@ variable "endpoint_public_access" {
   type        = bool
   default     = true
 }
+
+variable "managed_node_groups" {
+  type = map(object({
+    node_group_name = string
+    instance_types  = list(string)
+    capacity_type   = string
+    release_version = string
+    disk_size       = number
+    desired_size    = number
+    max_size        = number
+    min_size        = number
+  }))
+}
