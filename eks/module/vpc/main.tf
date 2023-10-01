@@ -40,7 +40,7 @@ resource "aws_eip" "nat_gw" {
 
 resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat_gw.id
-  subnet_id     = aws_subnet.private["subnet_a1"].id
+  subnet_id     = aws_subnet.public["subnet_a1"].id
 
   tags = {
     Name = "terraform-eks"
