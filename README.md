@@ -11,3 +11,4 @@
 * [step7. vpc 변수와 tfvars파일로 값 초기화](./vpc_tfvars/)
 * [step8. vpc와 subnet 생성](./vpc_with_subnet/)
 * [step9. 리팩토링 - vpc 모듈 생성](./vpc_with_subnet_module/)
+* [step10. EKS 생성](./eks)
