@@ -1,23 +1,17 @@
-# resource "aws_eks_cluster" "example" {
-#   name     = "example"
-#   role_arn = aws_iam_role.example.arn
+resource "aws_eks_cluster" "example" {
+  name     = var.eks-name
+  role_arn = aws_iam_role.eks_role.arn
+  version  = var.eks_version
 
-#   vpc_config {
-#     subnet_ids = [aws_subnet.example1.id, aws_subnet.example2.id]
-#   }
+  vpc_config {
+    subnet_ids              = var.private_subnets_ids
+    security_group_ids      = [aws_security_group.cluster.id]
+    endpoint_private_access = var.endpoint_prviate_access
+    endpoint_public_access  = var.endpoint_public_access
+  }
 
-#   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
-#   # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
-#   depends_on = [
-#     aws_iam_role_policy_attachment.example-AmazonEKSClusterPolicy,
-#     aws_iam_role_policy_attachment.example-AmazonEKSVPCResourceController,
-#   ]
-# }
-
-# output "endpoint" {
-#   value = aws_eks_cluster.example.endpoint
-# }
-
-# output "kubeconfig-certificate-authority-data" {
-#   value = aws_eks_cluster.example.certificate_authority[0].data
-# }
+  depends_on = [
+    aws_iam_policy_attachment.eks_cluster_policy,
+    aws_iam_policy_attachment.eks_cluster_vpc_controller
+  ]
+}

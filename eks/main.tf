@@ -36,8 +36,13 @@ module "vpc" {
   }
 }
 
-# module "eks" {
-#   source = "./module/eks"
+module "eks" {
+  source = "./module/eks"
 
-#   eks-name = "eks-from-terraform"
-# }
+  eks-name                = "eks-from-terraform"
+  eks_version             = "1.27"
+  vpc_id                  = module.vpc.vpc_id
+  private_subnets_ids     = module.vpc.private_subnets_ids
+  endpoint_prviate_access = true
+  endpoint_public_access  = true
+}
