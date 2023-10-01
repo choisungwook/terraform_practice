@@ -42,3 +42,9 @@ variable "managed_node_groups" {
     min_size        = number
   }))
 }
+
+variable "aws_auth_admin_roles" {
+  description = "eks admin in aws auth configmap"
+  type        = list(string)
+  default     = []
+}
