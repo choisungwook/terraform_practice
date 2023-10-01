@@ -15,7 +15,7 @@ variable "vpc_id" {
 
 variable "private_subnets_ids" {
   description = "private subnets ids"
-  type        = list(any)
+  type        = list(string)
 }
 
 variable "endpoint_prviate_access" {
