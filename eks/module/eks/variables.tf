@@ -48,3 +48,12 @@ variable "aws_auth_admin_roles" {
   type        = list(string)
   default     = []
 }
+
+variable "eks_addons" {
+  type = list(object({
+    name                 = string
+    version              = string
+    configuration_values = string
+  }))
+  default = []
+}
