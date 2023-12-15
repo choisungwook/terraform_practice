@@ -8,6 +8,12 @@ variable "eks_version" {
   type        = string
 }
 
+variable "oidc_provider_enabled" {
+  description = "oidc provider enabled"
+  type        = bool
+  default     = false
+}
+
 variable "vpc_id" {
   description = "vpc id"
   type        = string
