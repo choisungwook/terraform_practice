@@ -39,8 +39,9 @@ module "vpc" {
 module "eks" {
   source = "./module/eks"
 
-  eks-name    = "eks-from-terraform"
-  eks_version = "1.27"
+  eks-name              = "eks-from-terraform"
+  eks_version           = "1.27"
+  oidc_provider_enabled = true
 
   vpc_id                  = module.vpc.vpc_id
   private_subnets_ids     = module.vpc.private_subnets_ids
