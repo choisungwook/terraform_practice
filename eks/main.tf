@@ -45,7 +45,34 @@ module "eks" {
   vpc_id                  = module.vpc.vpc_id
   private_subnets_ids     = module.vpc.private_subnets_ids
   endpoint_prviate_access = true
-  endpoint_public_access  = true
+  # public_access가 false이면, terraform apply를 실행한 host가 private subnet이 접근 가능해야 합니다.
+  endpoint_public_access = true
+
+  # 아래 명령어를 실행하여 addon versoin을 설정하세요
+  # aws eks describe-addon-versions --kubernetes-version {eks_verison} --addon-name {addon_name} --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
+  eks_addons = [
+    {
+      name                 = "kube-proxy"
+      version              = "v1.27.1-eksbuild.1"
+      configuration_values = jsonencode({})
+    },
+    {
+      name                 = "vpc-cni"
+      version              = "v1.12.6-eksbuild.2"
+      configuration_values = jsonencode({})
+    },
+    {
+      name                 = "coredns"
+      version              = "v1.10.1-eksbuild.1"
+      configuration_values = jsonencode({})
+
+    },
+    {
+      name                 = "aws-ebs-csi-driver"
+      version              = "v1.25.0-eksbuild.1"
+      configuration_values = jsonencode({})
+    }
+  ]
 
   managed_node_groups = {
     "managed-node-group-a" = {
