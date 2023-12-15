@@ -9,4 +9,10 @@ terraform {
   required_version = ">= 1.4"
 }
 
-provider "aws" {}
+provider "aws" {
+  region = "ap-northeast-2"
+  assume_role {
+    role_arn = var.assume_role_arn
+  }
+  # profile    = var.aws_profile
+}

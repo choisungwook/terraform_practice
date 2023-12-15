@@ -21,8 +21,8 @@ locals {
 }
 
 provider "kubernetes" {
-  host                   = aws_eks_cluster.example.endpoint
-  cluster_ca_certificate = base64decode(aws_eks_cluster.example.certificate_authority[0].data)
+  host                   = aws_eks_cluster.main.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.main.certificate_authority[0].data)
 
   exec {
     api_version = "client.authentication.k8s.io/v1"
@@ -41,5 +41,5 @@ resource "kubernetes_config_map" "aws_auth_configmap" {
     namespace = "kube-system"
   }
 
-  depends_on = [aws_eks_cluster.example]
+  depends_on = [aws_eks_cluster.main]
 }

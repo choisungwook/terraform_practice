@@ -39,23 +39,28 @@ module "vpc" {
 module "eks" {
   source = "./module/eks"
 
-  eks-name                = "eks-from-terraform"
-  eks_version             = "1.27"
+  eks-name    = "eks-from-terraform"
+  eks_version = "1.27"
+
   vpc_id                  = module.vpc.vpc_id
   private_subnets_ids     = module.vpc.private_subnets_ids
   endpoint_prviate_access = true
   endpoint_public_access  = true
+
   managed_node_groups = {
     "managed-node-group-a" = {
       node_group_name = "managed-node-group-a",
-      instance_types  = ["t2.micro"],
-      capacity_type   = "ON_DEMAND",
+      instance_types  = ["t2.medium"],
+      capacity_type   = "SPOT",
       release_version = "" #latest
       disk_size       = 20
-      desired_size    = 1,
-      max_size        = 1,
-      min_size        = 1
+      desired_size    = 2,
+      max_size        = 2,
+      min_size        = 2
     }
   }
-  aws_auth_admin_roles = ["arn:aws:iam::467606240901:role/eks-admin-role"]
+
+  aws_auth_admin_roles = [
+    var.assume_role_arn
+  ]
 }

@@ -1,10 +1,11 @@
+# Cluster security group
 resource "aws_security_group" "cluster" {
   name        = "eks-cluster-${var.eks-name}"
-  description = "EKS Cluster security group"
+  description = "Default SG to allow traffic from the EKS"
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Allow self EKS Cluster security group"
+    description = "Allow self"
     self        = true
     from_port   = 0
     to_port     = 0

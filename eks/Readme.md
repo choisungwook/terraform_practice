@@ -1,24 +1,43 @@
 # 개요
 * 테라폼으로 EKS 생성
 
+<br>
+
 # 생성 방법
 
-```bash
-# EKS 생성
-terraform init
-terraform apply
+* 테라폼 변수를 환경변수로 설정
 
-# kubectl config 생성
+```bash
+# AWS profile
+export TF_VAR_assume_role_arn=""
+```
+
+* 테라폼 코드 실행
+```bash
+terraform init
+terraform plan
+terraform apply # 약 15~20분 소요
+````
+
+* kubeconfig 생성
+
+```bash
+# kubeconfig 생성
 aws eks update-kubeconfig --region ap-northeast-2 --name eks-from-terraform
 
 # cluster 확인
 kubectl cluster-info
 ```
 
+<br>
+
 # 삭제 방법
+
 ```bash
 terrform destroy
 ```
+
+<br>
 
 # 참고자료
 * terraform module 디버깅: https://thoeny.dev/how-to-debug-in-terraform
