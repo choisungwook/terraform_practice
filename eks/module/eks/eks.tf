@@ -1,4 +1,4 @@
-resource "aws_eks_cluster" "example" {
+resource "aws_eks_cluster" "main" {
   name     = var.eks-name
   role_arn = aws_iam_role.eks_role.arn
   version  = var.eks_version
@@ -16,10 +16,10 @@ resource "aws_eks_cluster" "example" {
   ]
 }
 
-resource "aws_eks_node_group" "example" {
+resource "aws_eks_node_group" "main" {
   for_each = var.managed_node_groups
 
-  cluster_name    = aws_eks_cluster.example.name
+  cluster_name    = aws_eks_cluster.main.name
   node_group_name = each.value["node_group_name"]
   instance_types  = each.value["instance_types"]
   capacity_type   = each.value["capacity_type"]
@@ -34,7 +34,7 @@ resource "aws_eks_node_group" "example" {
   }
 
   depends_on = [
-    aws_eks_cluster.example,
+    aws_eks_cluster.main,
     kubernetes_config_map.aws_auth_configmap,
     aws_iam_role_policy_attachment.node_group_AmazonEC2ContainerRegistryReadOnly,
     aws_iam_role_policy_attachment.node_group_AmazonEKSWorkerNodePolicy,
