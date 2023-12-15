@@ -14,5 +14,4 @@ provider "aws" {
   assume_role {
     role_arn = var.assume_role_arn
   }
-  # profile    = var.aws_profile
 }
