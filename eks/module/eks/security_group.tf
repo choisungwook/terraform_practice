@@ -1,6 +1,6 @@
-# Cluster security group
+# EKS Addeistional security group
 resource "aws_security_group" "cluster" {
-  name        = "eks-cluster-${var.eks-name}"
+  name        = "eks-cluster-${var.eks_cluster_name}"
   description = "Default SG to allow traffic from the EKS"
   vpc_id      = var.vpc_id
 
@@ -21,6 +21,6 @@ resource "aws_security_group" "cluster" {
   }
 
   tags = {
-    Name = "terraform-eks"
+    Name = "terraform-eks-additional-SG"
   }
 }

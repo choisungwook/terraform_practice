@@ -41,7 +41,7 @@ module "vpc" {
 module "eks" {
   source = "./module/eks"
 
-  eks-name              = var.eks_cluster_name
+  eks_cluster_name      = var.eks_cluster_name
   eks_version           = "1.27"
   oidc_provider_enabled = true
 
