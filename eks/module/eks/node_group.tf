@@ -1,22 +1,3 @@
-resource "aws_eks_cluster" "main" {
-  name     = var.eks_cluster_name
-  role_arn = aws_iam_role.eks_role.arn
-  version  = var.eks_version
-
-  vpc_config {
-    subnet_ids = var.private_subnets_ids
-    # EKS Addeistional security group
-    security_group_ids      = [aws_security_group.cluster.id]
-    endpoint_private_access = var.endpoint_prviate_access
-    endpoint_public_access  = var.endpoint_public_access
-  }
-
-  depends_on = [
-    aws_iam_policy_attachment.eks_cluster_policy,
-    aws_iam_policy_attachment.eks_cluster_vpc_controller
-  ]
-}
-
 resource "aws_eks_node_group" "main" {
   for_each = var.managed_node_groups
 
@@ -28,6 +9,7 @@ resource "aws_eks_node_group" "main" {
   disk_size       = each.value["disk_size"]
   node_role_arn   = aws_iam_role.node_group_role.arn
   subnet_ids      = var.private_subnets_ids
+
   scaling_config {
     desired_size = each.value["desired_size"]
     max_size     = each.value["max_size"]
