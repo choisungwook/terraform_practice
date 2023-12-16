@@ -13,7 +13,8 @@ resource "aws_subnet" "public" {
   cidr_block        = each.value["cidr"]
   availability_zone = each.value["az"]
 
-  tags = each.value["tags"]
+  tags = merge({
+  }, each.value["tags"])
 }
 
 resource "aws_subnet" "private" {
@@ -23,7 +24,9 @@ resource "aws_subnet" "private" {
   cidr_block        = each.value["cidr"]
   availability_zone = each.value["az"]
 
-  tags = each.value["tags"]
+  tags = merge({
+    "karpenter.sh/discovery" : var.eks_cluster_name
+  }, each.value["tags"])
 }
 
 resource "aws_internet_gateway" "main" {
