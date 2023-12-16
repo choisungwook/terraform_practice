@@ -90,6 +90,9 @@ module "eks" {
     }
   }
 
+  // irsa role 생성 여부
+  karpenter_enabled = true
+
   aws_auth_admin_roles = [
     var.assume_role_arn
   ]

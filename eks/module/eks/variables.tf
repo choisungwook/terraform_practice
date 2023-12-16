@@ -63,3 +63,9 @@ variable "eks_addons" {
   }))
   default = []
 }
+
+variable "karpenter_enabled" {
+  description = "karpenter enabled"
+  type        = bool
+  default     = false
+}
