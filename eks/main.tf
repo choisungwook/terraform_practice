@@ -51,7 +51,7 @@ module "eks" {
   # public_access가 false이면, terraform apply를 실행한 host가 private subnet이 접근 가능해야 합니다.
   endpoint_public_access = true
 
-  # 아래 명령어를 실행하여 addon versoin을 설정하세요
+  # 아래 명령어를 실행하여 addon version을 설정하세요
   # aws eks describe-addon-versions --kubernetes-version {eks_verison} --addon-name {addon_name} --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
   eks_addons = [
     {

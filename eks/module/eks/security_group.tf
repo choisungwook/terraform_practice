@@ -1,4 +1,4 @@
-# EKS Addeistional security group
+# EKS Additional security group
 resource "aws_security_group" "cluster" {
   name        = "eks-cluster-${var.eks_cluster_name}"
   description = "Default SG to allow traffic from the EKS"
