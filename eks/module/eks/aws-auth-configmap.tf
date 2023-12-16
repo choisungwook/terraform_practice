@@ -27,7 +27,7 @@ provider "kubernetes" {
   exec {
     api_version = "client.authentication.k8s.io/v1"
     command     = "aws"
-    args        = concat(["eks", "get-token", "--cluster-name", var.eks-name])
+    args        = concat(["eks", "get-token", "--cluster-name", var.eks_cluster_name])
   }
 }
 
