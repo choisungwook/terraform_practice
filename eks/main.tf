@@ -69,11 +69,6 @@ module "eks" {
       version              = "v1.10.1-eksbuild.1"
       configuration_values = jsonencode({})
 
-    },
-    {
-      name                 = "aws-ebs-csi-driver"
-      version              = "v1.25.0-eksbuild.1"
-      configuration_values = jsonencode({})
     }
   ]
 
