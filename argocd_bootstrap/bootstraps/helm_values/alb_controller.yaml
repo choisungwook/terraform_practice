@@ -1,0 +1,5 @@
+clusterName: eks-from-terraform
+
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::467606240901:role/eks-from-terraform-alb-controller-irsa
