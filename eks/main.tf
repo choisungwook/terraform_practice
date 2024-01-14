@@ -88,6 +88,7 @@ module "eks" {
   // irsa role 생성 여부
   karpenter_enabled      = true
   alb_controller_enabled = true
+  external_dns_enabled   = true
 
   // aws-auth configmap 설정
   aws_auth_admin_roles = [
