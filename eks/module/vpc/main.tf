@@ -14,6 +14,8 @@ resource "aws_subnet" "public" {
   availability_zone = each.value["az"]
 
   tags = merge({
+    "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared"
+    "kubernetes.io/role/elb"                        = "1"
   }, each.value["tags"])
 }
 
@@ -25,6 +27,8 @@ resource "aws_subnet" "private" {
   availability_zone = each.value["az"]
 
   tags = merge({
+    "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared"
+    "kubernetes.io/role/internal-elb"               = "1"
     "karpenter.sh/discovery" : var.eks_cluster_name
   }, each.value["tags"])
 }
