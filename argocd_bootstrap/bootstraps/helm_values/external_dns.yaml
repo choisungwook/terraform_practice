@@ -6,7 +6,8 @@ serviceAccount:
 txtOwnerId: external-dns
 
 # your hostzone domain
-domainFilters: choilab.xyz
+domainFilters:
+- choilab.xyz
 
 env:
 - name: AWS_DEFAULT_REGION
