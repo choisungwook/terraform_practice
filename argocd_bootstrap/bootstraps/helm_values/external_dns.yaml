@@ -1,0 +1,17 @@
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::467606240901:role/eks-from-terraform-external-dns-irsa
+
+extraArgs:
+- --source=service
+- --source=ingress
+- --domain-filter=choilab.xyz # your hosted zone domain
+- --provider=aws
+- --policy=upsert-only
+- --aws-zone-type=public
+- --registry=txt
+- --txt-owner-id=external-dns
+
+env:
+- name: AWS_DEFAULT_REGION
+  value: ap-northeast-2 # change to region where EKS is installed
