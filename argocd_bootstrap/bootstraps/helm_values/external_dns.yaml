@@ -6,7 +6,6 @@ extraArgs:
 - --source=service
 - --source=ingress
 - --domain-filter=choilab.xyz # your hosted zone domain
-- --provider=aws
 - --policy=upsert-only
 - --aws-zone-type=public
 - --registry=txt
