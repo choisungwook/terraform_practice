@@ -69,3 +69,9 @@ variable "karpenter_enabled" {
   type        = bool
   default     = false
 }
+
+variable "alb_controller_enabled" {
+  description = "alb controller enabled"
+  type        = bool
+  default     = false
+}
