@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "eks_external_dns_irsa_assume_role_policy" {
     condition {
       test     = "StringEquals"
       variable = "${replace(aws_iam_openid_connect_provider.main.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:kube-system:external-dns-irsa-sa"]
+      values   = ["system:serviceaccount:kube-system:external-dns"]
     }
   }
 }
