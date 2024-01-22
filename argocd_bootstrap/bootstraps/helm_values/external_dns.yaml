@@ -1,5 +1,5 @@
 serviceAccount:
-  name: external-dns-irsa-sa
+  name: external-dns
   annotations:
     eks.amazonaws.com/role-arn: arn:aws:iam::467606240901:role/eks-from-terraform-external-dns-irsa
 
