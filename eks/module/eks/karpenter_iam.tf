@@ -121,11 +121,15 @@ data "aws_iam_policy_document" "eks_karpenter_fis_trust" {
 }
 
 resource "aws_iam_role_policy_attachment" "eks_karpenter_fis_ec2_policy" {
+  count = var.karpenter_enabled ? 1 : 0
+
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSFaultInjectionSimulatorEC2Access"
   role       = aws_iam_role.eks_karpenter_fis[0].id
 }
 
 resource "aws_iam_role_policy_attachment" "eks_karpenter_fis_eks_policy" {
+  count = var.karpenter_enabled ? 1 : 0
+
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSFaultInjectionSimulatorEKSAccess"
   role       = aws_iam_role.eks_karpenter_fis[0].id
 }
