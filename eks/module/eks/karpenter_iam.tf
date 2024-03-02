@@ -96,6 +96,10 @@ resource "aws_iam_role_policy_attachment" "eks_karpenter_irsa" {
   policy_arn = aws_iam_policy.eks_karpenter_irsa_policy[0].arn
 }
 
+################################################################################
+# Karpenter FIS
+################################################################################
+
 resource "aws_iam_role" "eks_karpenter_fis" {
   count = var.karpenter_enabled ? 1 : 0
 
