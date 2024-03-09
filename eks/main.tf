@@ -75,13 +75,13 @@ module "eks" {
   managed_node_groups = {
     "managed-node-group-a" = {
       node_group_name = "managed-node-group-a",
-      instance_types  = ["t2.medium"],
+      instance_types  = ["t3.medium"],
       capacity_type   = "SPOT",
       release_version = "" #latest
       disk_size       = 20
-      desired_size    = 2,
-      max_size        = 2,
-      min_size        = 2
+      desired_size    = 3,
+      max_size        = 3,
+      min_size        = 3
     }
   }
 
