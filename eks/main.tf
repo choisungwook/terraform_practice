@@ -42,7 +42,7 @@ module "eks" {
   source = "./module/eks"
 
   eks_cluster_name      = var.eks_cluster_name
-  eks_version           = "1.27"
+  eks_version           = "1.29"
   oidc_provider_enabled = true
 
   vpc_id                  = module.vpc.vpc_id
@@ -54,19 +54,22 @@ module "eks" {
   # 아래 명령어를 실행하여 addon version을 설정하세요
   # aws eks describe-addon-versions --kubernetes-version {eks_verison} --addon-name {addon_name} --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
   eks_addons = [
+    # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-kube-proxy.html
     {
       name                 = "kube-proxy"
-      version              = "v1.27.1-eksbuild.1"
+      version              = "v1.29.0-eksbuild.3"
       configuration_values = jsonencode({})
     },
+    # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-vpc-cni.html
     {
       name                 = "vpc-cni"
-      version              = "v1.12.6-eksbuild.2"
+      version              = "v1.16.2-eksbuild.1"
       configuration_values = jsonencode({})
     },
+    # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-coredns.html
     {
       name                 = "coredns"
-      version              = "v1.10.1-eksbuild.1"
+      version              = "v1.11.1-eksbuild.6"
       configuration_values = jsonencode({})
 
     }
@@ -85,7 +88,7 @@ module "eks" {
     }
   }
 
-  // irsa role 생성 여부
+  // IRSA role 생성 여부
   karpenter_enabled      = true
   alb_controller_enabled = true
   external_dns_enabled   = true
