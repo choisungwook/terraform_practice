@@ -47,7 +47,7 @@ module "eks" {
 
   vpc_id                  = module.vpc.vpc_id
   private_subnets_ids     = module.vpc.private_subnets_ids
-  endpoint_prviate_access = true
+  endpoint_private_access = true
   # public_access가 false이면, terraform apply를 실행한 host가 private subnet이 접근 가능해야 합니다.
   endpoint_public_access = true
 
