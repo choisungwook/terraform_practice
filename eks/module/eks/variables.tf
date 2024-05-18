@@ -24,7 +24,7 @@ variable "private_subnets_ids" {
   type        = list(string)
 }
 
-variable "endpoint_prviate_access" {
+variable "endpoint_private_access" {
   description = "endpoint for prviate access"
   type        = bool
   default     = true
