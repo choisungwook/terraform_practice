@@ -17,8 +17,7 @@ resource "aws_eks_node_group" "main" {
   }
 
   depends_on = [
-    aws_eks_cluster.main,
-    kubernetes_config_map.aws_auth_configmap,
+    aws_eks_access_entry.cluster_admins,
     aws_iam_role_policy_attachment.node_group_AmazonEC2ContainerRegistryReadOnly,
     aws_iam_role_policy_attachment.node_group_AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.node_group_AmazonEC2RoleforSSM,
