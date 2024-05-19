@@ -53,3 +53,6 @@ terrform destroy
 * terraform eks addons: https://dev.to/aws-builders/install-manage-amazon-eks-add-ons-with-terraform-2dea
 * terraform irsa: https://medium.com/@tech_18484/step-by-step-guide-creating-an-eks-cluster-with-terraform-resources-iam-roles-for-service-df1c5e389811
 * terraform aws_iam_policy_document: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment
+* migrate from aws-auth to access entry: https://fixit-xdu.medium.com/aws-eks-access-entry-4a7e25ed6c3a
+* migrate from aws-auth to access entry: https://opsinsights.dev/simplifying-access-entries-in-eks-a-guide
+* aws docs - accesss entry: https://docs.aws.amazon.com/eks/latest/userguide/migrating-access-entries.html

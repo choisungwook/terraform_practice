@@ -15,4 +15,9 @@ resource "aws_eks_cluster" "main" {
     aws_iam_policy_attachment.eks_cluster_policy,
     aws_iam_policy_attachment.eks_cluster_vpc_controller
   ]
+
+  access_config {
+    authentication_mode                         = "API"
+    bootstrap_cluster_creator_admin_permissions = false
+  }
 }

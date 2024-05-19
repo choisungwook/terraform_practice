@@ -50,7 +50,7 @@ variable "managed_node_groups" {
 }
 
 variable "aws_auth_admin_roles" {
-  description = "eks admin in aws auth configmap"
+  description = "eks admin IAM roles"
   type        = list(string)
   default     = []
 }
