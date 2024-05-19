@@ -93,7 +93,7 @@ module "eks" {
   alb_controller_enabled = true
   external_dns_enabled   = true
 
-  // aws-auth configmap 설정
+  // EKS access entry 설정
   aws_auth_admin_roles = [
     var.assume_role_arn
   ]
