@@ -92,9 +92,28 @@ module "eks" {
   karpenter_enabled      = true
   alb_controller_enabled = true
   external_dns_enabled   = true
+  enable_amp             = var.enable_amp
 
   // EKS access entry 설정
   aws_auth_admin_roles = [
     var.assume_role_arn
   ]
+}
+
+data "local_file" "managed_prometheus_config" {
+  count = var.enable_amp ? 1 : 0
+
+  filename = "scrape_configuration.yaml"
+}
+
+module "managed_prometheus" {
+  count = var.enable_amp ? 1 : 0
+
+  source = "./module/managed_prometheus"
+
+  enable_amp                  = var.enable_amp
+  eks_cluster_name            = var.eks_cluster_name
+  eks_cluster_arn             = module.eks.eks_cluster_arn
+  scrap_configuration_content = data.local_file.managed_prometheus_config[0].content
+  private_subnets_ids         = module.vpc.private_subnets_ids
 }

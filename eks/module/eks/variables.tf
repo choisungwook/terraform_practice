@@ -82,3 +82,7 @@ variable "external_dns_enabled" {
   default     = false
 }
 
+variable "enable_amp" {
+  type    = bool
+  default = false
+}

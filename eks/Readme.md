@@ -31,6 +31,12 @@ kubectl cluster-info
 
 <br>
 
+# (옵션) Amazon prometheus를 사용하여 EKS 메트릭 수집
+
+1. 테라폼 변수에서 enable_amp를 true로 설정
+2. terraform apply(약 20분 소요)
+3. [문서](./Amazon_prometheus.md)를 참고하여 grafana<->Amazon proemtheus 연동
+
 # 삭제 방법
 
 ```bash
