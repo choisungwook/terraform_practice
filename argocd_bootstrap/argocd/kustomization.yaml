@@ -8,15 +8,15 @@ resources:
 - github.com/argoproj/argo-cd/manifests/crds?ref=stable
 - github.com/argoproj/argo-cd/manifests/cluster-rbac?ref=stable
 - ./patches/argocd-project-bootstrap.yaml
-- ./patches/argocd-ingress.yaml
+# - ./patches/argocd-ingress.yaml
 
-patches:
+# patches:
 # Argo Rollouts Extension 설치
 # https://github.com/argoproj-labs/argocd-extension-metrics#install-ui-extension
-- path: patches/argocd-server-deployment.yaml
-  target:
-    kind: Deployment
-    name: argocd-server
+# - path: patches/argocd-server-deployment.yaml
+#   target:
+#     kind: Deployment
+#     name: argocd-server
 # - path: patches/argocd-rbac-cm.yaml
 #   target:
 #     name: argocd-rbac-cm
