@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: external-dns
+  name: alb-controller
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: bootstrap
   sources:
-  - repoURL: 'https://kubernetes-sigs.github.io/external-dns/'
-    chart: external-dns
-    targetRevision: 1.14.0
+  - repoURL: 'https://aws.github.io/eks-charts'
+    targetRevision: 1.6.2
+    chart: aws-load-balancer-controller
     helm:
       valueFiles:
-      - $values/argocd_bootstrap/bootstraps/helm_values/external_dns.yaml
+      - $values/argocd_bootstrap/bootstraps/helm_values/alb_controller.yaml
   - repoURL: 'https://github.com/choisungwook/terraform_practice.git'
     targetRevision: main
     ref: values

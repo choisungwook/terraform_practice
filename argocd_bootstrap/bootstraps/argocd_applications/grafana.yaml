@@ -6,7 +6,7 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: bootstrap
   sources:
   - repoURL: 'https://grafana.github.io/helm-charts'
     targetRevision: 7.3.11
