@@ -11,3 +11,14 @@ ingress:
 
   hosts:
   - grafana.choilab.xyz
+
+# reference: https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-onboard-query-grafana-7.3.html#AMP-onboard-query-grafana-7.3-IRSA
+serviceAccount:
+  name: "grafana-irsa-sa"
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::467606240901:role/eks-from-terraform-grafana-irsa"
+
+# reference: https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-onboard-query-grafana-7.3.html#AMP-onboard-query-grafana-7.3-IRSA
+grafana.ini:
+  auth:
+    sigv4_auth_enabled: true
