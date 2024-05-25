@@ -13,6 +13,12 @@ spec:
         targetRevision: '7.3.11'
         valueFile: 'grafana.yaml'
         namespace: monitoring
+      - name: argo-rollouts
+        repoURL: 'https://argoproj.github.io/argo-helm'
+        chart: argo-rollouts
+        targetRevision: '2.35.3'
+        valueFile: 'argo-rollouts.yaml'
+        namespace: argo-rollouts
   template:
     metadata:
       name: '{{name}}'
