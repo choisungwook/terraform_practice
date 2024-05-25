@@ -16,8 +16,9 @@ resource "aws_eks_cluster" "main" {
     aws_iam_policy_attachment.eks_cluster_vpc_controller
   ]
 
+  # https://registry.terraform.io/providers/hashicorp/aws/5.50.0/docs/resources/eks_cluster.html#access_config
   access_config {
-    authentication_mode                         = "API"
+    authentication_mode                         = "API_AND_CONFIG_MAP" # or API
     bootstrap_cluster_creator_admin_permissions = false
   }
 }
