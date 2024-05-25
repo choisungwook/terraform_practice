@@ -111,7 +111,6 @@ module "managed_prometheus" {
 
   source = "./module/managed_prometheus"
 
-  enable_amp                  = var.enable_amp
   eks_cluster_name            = var.eks_cluster_name
   eks_cluster_arn             = module.eks.eks_cluster_arn
   scrap_configuration_content = data.local_file.managed_prometheus_config[0].content
