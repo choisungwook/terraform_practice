@@ -1,0 +1,28 @@
+# this is use of mysql data encryption
+lake:
+  encryptionSecret:
+    secret: VALVDTNQBLUVCGWBKHHMARFLYWBKWKWBRMIMTUCSGDZJXTUYEJLUPANWUEGYCFSMNHVZNZYZOXHUSYSDHFVWXITMOYYKKQVZKJZBOSVJNUCVDSWDSNRTDEWQOLMUIKZW
+
+mysql:
+  storage:
+    type: pvc
+    # the storage class for pv, leave empty will using default
+    class: ""
+    size: 20Gi
+    hostPath: /devlake/mysql/data
+
+# config-ui pod and grafana pod
+ingress:
+  enabled: true
+  ClassName: alb
+  hostname: devlake.choilab.xyz
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:467606240901:certificate/248292f9-a31b-46b7-be91-b1e23a2b9a70
+    external-dns.alpha.kubernetes.io/hostname: devlake.choilab.xyz
+
+grafana:
+  enabled: true
