@@ -15,3 +15,30 @@ dashboard:
   #     external-dns.alpha.kubernetes.io/hostname: argo-rollouts.choilab.xyz
   #   hosts:
   #   - argo-rollouts.choilab.xyz
+
+
+notifications:
+  notifiers:
+    service.devlake: |
+      url: https://devlake.choilab.xyz
+      headers:
+      - name: Authorization
+        value: WjkYJlhScTgaqpGeAEUvDiaRxnpjCTQmcPgU69fDDd8U0t8QUoYM5OWdaYBMlrDBlrVkqR74ZU4OdDUK4Sv5UWldFKnZx5MWefyUBzvHYusmdTbN5IqAHAdzGYsVlIDt
+
+  templates:
+    template.devlake-bluegreen: |
+      method: POST
+      path: /api/rest/plugins/webhook/connections/1/deployments
+      body: |
+        {
+          "pipeline_id":"{{ .rollout.status.blueGreen.activeSelector }}",
+          "repo_url":"https://github.com/choisungwook/terraform_practice",
+          "commit_sha":"{{ .rollout.status.blueGreen.activeSelector }}",
+          "display_title":"{{ .rollout.pauseConditions[0].reason }}",
+          "start_time":"{{ .rollout.pauseConditions[0].startTime }}",
+          "result:"{{ .rollout.status.phase}}"
+        }
+
+  triggers:
+    trigger.rollout-promote: |
+      - send: [devlake-bluegreen-success]
