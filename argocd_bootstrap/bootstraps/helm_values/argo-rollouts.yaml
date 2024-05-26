@@ -37,7 +37,7 @@ notifications:
               "repo_url":"https://github.com/choisungwook/terraform_practice",
               "commit_sha":"{{.rollout.status.blueGreen.activeSelector}}",
               "display_title":"test",
-              "start_time":"{{.app.operationState.finishedAt}}",
+              "start_time":"2020-01-02T13:00:00+00:00",
               "result":"{{.rollout.status.phase}}"
             }
 
