@@ -26,6 +26,7 @@ notifications:
         value: "Bearer WjkYJlhScTgaqpGeAEUvDiaRxnpjCTQmcPgU69fDDd8U0t8QUoYM5OWdaYBMlrDBlrVkqR74ZU4OdDUK4Sv5UWldFKnZx5MWefyUBzvHYusmdTbN5IqAHAdzGYsVlIDt"
 
   templates:
+    # time function reference: https://docs.gomplate.ca/functions/time/
     template.devlake-webhook: |
       webhook:
         devlake:
@@ -37,7 +38,7 @@ notifications:
               "repo_url":"https://github.com/choisungwook/terraform_practice",
               "commit_sha":"{{.rollout.status.stableRS}}",
               "display_title":"test",
-              "start_time":"2020-01-02T13:00:00+00:00",
+              "start_time":"{{time.Now().Format(time.RFC3339)}}",
               "result":"{{.rollout.status.phase}}"
             }
 
