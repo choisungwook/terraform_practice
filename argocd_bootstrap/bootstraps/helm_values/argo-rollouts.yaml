@@ -39,6 +39,9 @@ notifications:
           "result:"{{ .rollout.status.phase}}"
         }
 
+  # reference: https://argo-rollouts.readthedocs.io/en/stable/features/notifications/#default-trigger-templates
   triggers:
-    trigger.rollout-promote: |
+    trigger.on-rollout-completed: |
+      - send: [devlake-webhook]
+    trigger.on-rollout-step-completed: |
       - send: [devlake-webhook]
