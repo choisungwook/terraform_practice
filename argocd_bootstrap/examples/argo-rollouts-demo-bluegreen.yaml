@@ -6,6 +6,8 @@ metadata:
   annotations:
     # <trigger name>.<service name>: ""
     notifications.argoproj.io/subscribe.on-rollout-promote-success.devlake: 'true'
+    # https://github.com/argoproj/argo-cd/discussions/13010#discussioncomment-5444754
+    notifications.argoproj.io/devlake-webhook-api: 'https://example.com'
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
