@@ -26,7 +26,7 @@ notifications:
         value: WjkYJlhScTgaqpGeAEUvDiaRxnpjCTQmcPgU69fDDd8U0t8QUoYM5OWdaYBMlrDBlrVkqR74ZU4OdDUK4Sv5UWldFKnZx5MWefyUBzvHYusmdTbN5IqAHAdzGYsVlIDt
 
   templates:
-    template.devlake-bluegreen: |
+    template.devlake-webhook: |
       method: POST
       path: /api/rest/plugins/webhook/connections/1/deployments
       body: |
@@ -41,4 +41,4 @@ notifications:
 
   triggers:
     trigger.rollout-promote: |
-      - send: [devlake-bluegreen-success]
+      - send: [devlake-webhook]
