@@ -5,7 +5,7 @@ lake:
 
 mysql:
   storage:
-    type: pvc
+    type: hostpath # " or pvc
     # the storage class for pv, leave empty will using default
     class: ""
     size: 20Gi
