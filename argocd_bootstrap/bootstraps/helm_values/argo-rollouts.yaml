@@ -36,7 +36,7 @@ notifications:
           "commit_sha":"{{ .rollout.status.blueGreen.activeSelector }}",
           "display_title":"{{ .rollout.pauseConditions[0].reason }}",
           "start_time":"{{ .rollout.pauseConditions[0].startTime }}",
-          "result:"{{ .rollout.status.phase}}"
+          "result":"{{ .rollout.status.phase }}"
         }
 
   # reference: https://argo-rollouts.readthedocs.io/en/stable/features/notifications/#default-trigger-templates
