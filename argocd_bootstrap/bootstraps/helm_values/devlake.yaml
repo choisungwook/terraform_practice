@@ -26,3 +26,5 @@ ingress:
 
 grafana:
   enabled: true
+  persistence:
+    enabled: false
