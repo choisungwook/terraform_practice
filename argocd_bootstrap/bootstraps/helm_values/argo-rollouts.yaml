@@ -33,9 +33,9 @@ notifications:
           path: /api/rest/plugins/webhook/connections/1/deployments
           body: |
             {
-              "pipeline_id":"{{.rollout.status.blueGreen.activeSelector}}",
+              "pipeline_id":"{{.rollout.status.blueGreen.stableRS}}",
               "repo_url":"https://github.com/choisungwook/terraform_practice",
-              "commit_sha":"{{.rollout.status.blueGreen.activeSelector}}",
+              "commit_sha":"{{.rollout.status.blueGreen.stableRS}}",
               "display_title":"test",
               "start_time":"2020-01-02T13:00:00+00:00",
               "result":"{{.rollout.status.phase}}"
@@ -43,6 +43,9 @@ notifications:
 
   # reference: https://argo-rollouts.readthedocs.io/en/stable/features/notifications/#default-trigger-templates
   triggers:
+    trigger.on-rollout-promote-success: |
+      - send: [devlake-webhook]
+        when: rollout.status.phase == "Healthy"
     trigger.on-rollout-completed: |
       - send: [devlake-webhook]
     trigger.on-rollout-step-completed: |
