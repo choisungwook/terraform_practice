@@ -33,9 +33,9 @@ notifications:
           path: /api/rest/plugins/webhook/connections/1/deployments
           body: |
             {
-              "pipeline_id":"{{.rollout.status.blueGreen.stableRS}}",
+              "pipeline_id":"{{.rollout.status.stableRS}}",
               "repo_url":"https://github.com/choisungwook/terraform_practice",
-              "commit_sha":"{{.rollout.status.blueGreen.stableRS}}",
+              "commit_sha":"{{.rollout.status.stableRS}}",
               "display_title":"test",
               "start_time":"2020-01-02T13:00:00+00:00",
               "result":"{{.rollout.status.phase}}"
