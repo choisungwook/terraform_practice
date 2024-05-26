@@ -23,7 +23,7 @@ notifications:
       url: https://devlake.choilab.xyz
       headers:
       - name: Authorization
-        value: WjkYJlhScTgaqpGeAEUvDiaRxnpjCTQmcPgU69fDDd8U0t8QUoYM5OWdaYBMlrDBlrVkqR74ZU4OdDUK4Sv5UWldFKnZx5MWefyUBzvHYusmdTbN5IqAHAdzGYsVlIDt
+        value: "Bearer WjkYJlhScTgaqpGeAEUvDiaRxnpjCTQmcPgU69fDDd8U0t8QUoYM5OWdaYBMlrDBlrVkqR74ZU4OdDUK4Sv5UWldFKnZx5MWefyUBzvHYusmdTbN5IqAHAdzGYsVlIDt"
 
   templates:
     template.devlake-webhook: |
