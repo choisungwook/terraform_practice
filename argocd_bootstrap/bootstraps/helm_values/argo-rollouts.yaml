@@ -27,17 +27,19 @@ notifications:
 
   templates:
     template.devlake-webhook: |
-      method: POST
-      path: /api/rest/plugins/webhook/connections/1/deployments
-      body: |
-        {
-          "pipeline_id":"{{ .rollout.status.blueGreen.activeSelector }}",
-          "repo_url":"https://github.com/choisungwook/terraform_practice",
-          "commit_sha":"{{ .rollout.status.blueGreen.activeSelector }}",
-          "display_title":"{{ .rollout.pauseConditions[0].reason }}",
-          "start_time":"{{ .rollout.pauseConditions[0].startTime }}",
-          "result":"{{ .rollout.status.phase }}"
-        }
+      webhook:
+        devlake:
+          method: POST
+          path: /api/rest/plugins/webhook/connections/1/deployments
+          body: |
+            {
+              "pipeline_id":"{{ .rollout.status.blueGreen.activeSelector }}",
+              "repo_url":"https://github.com/choisungwook/terraform_practice",
+              "commit_sha":"{{ .rollout.status.blueGreen.activeSelector }}",
+              "display_title":"{{ .rollout.pauseConditions[0].reason }}",
+              "start_time":"{{ .rollout.pauseConditions[0].startTime }}",
+              "result":"{{ .rollout.status.phase }}"
+            }
 
   # reference: https://argo-rollouts.readthedocs.io/en/stable/features/notifications/#default-trigger-templates
   triggers:
