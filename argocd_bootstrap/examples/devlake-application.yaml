@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devlake
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: devlake
+    server: 'https://kubernetes.default.svc'
+  sources:
+  - repoURL: 'https://apache.github.io/incubator-devlake-helm-chart'
+    targetRevision: 1.0.0-beta9
+    chart: devlake
+    helm:
+      valueFiles:
+      - $values/argocd_bootstrap/bootstraps/helm_values/devlake.yaml
+  - repoURL: 'https://github.com/choisungwook/terraform_practice.git'
+    targetRevision: main
+    ref: values
+  project: default
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
