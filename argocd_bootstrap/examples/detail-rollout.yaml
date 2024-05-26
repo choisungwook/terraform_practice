@@ -1,0 +1,90 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"argoproj.io/v1alpha1","kind":"Rollout","metadata":{"annotations":{},"labels":{"app":"bluegreen-demo","app.kubernetes.io/instance":"argo-rollouts-demo-bluegreen"},"name":"bluegreen-demo","namespace":"default"},"spec":{"replicas":3,"revisionHistoryLimit":1,"selector":{"matchLabels":{"app":"bluegreen-demo"}},"strategy":{"blueGreen":{"activeService":"bluegreen-demo","autoPromotionEnabled":false,"previewService":"bluegreen-demo-preview"}},"template":{"metadata":{"labels":{"app":"bluegreen-demo"}},"spec":{"containers":[{"image":"argoproj/rollouts-demo:blue","imagePullPolicy":"Always","name":"bluegreen-demo","ports":[{"containerPort":8080,"name":"http","protocol":"TCP"}],"resources":{"requests":{"cpu":"5m","memory":"32Mi"}}}]}}}}
+    rollout.argoproj.io/revision: "3"
+  creationTimestamp: "2024-05-25T09:27:09Z"
+  generation: 3
+  labels:
+    app: bluegreen-demo
+    app.kubernetes.io/instance: argo-rollouts-demo-bluegreen
+  name: bluegreen-demo
+  namespace: default
+  resourceVersion: "375839"
+  uid: 85c8d808-2fd3-4706-bcf0-722507c875f6
+spec:
+  replicas: 3
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: bluegreen-demo
+  strategy:
+    blueGreen:
+      activeService: bluegreen-demo
+      autoPromotionEnabled: false
+      previewService: bluegreen-demo-preview
+  template:
+    metadata:
+      labels:
+        app: bluegreen-demo
+    spec:
+      containers:
+      - image: argoproj/rollouts-demo:blue
+        imagePullPolicy: Always
+        name: bluegreen-demo
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 5m
+            memory: 32Mi
+status:
+  HPAReplicas: 3
+  availableReplicas: 3
+  blueGreen:
+    activeSelector: 7d6459646d
+    previewSelector: 7d6459646d
+  canary: {}
+  conditions:
+  - lastTransitionTime: "2024-05-25T09:27:15Z"
+    lastUpdateTime: "2024-05-25T09:27:15Z"
+    message: Rollout has minimum availability
+    reason: AvailableReason
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2024-05-26T08:35:35Z"
+    lastUpdateTime: "2024-05-26T08:35:35Z"
+    message: ReplicaSet "bluegreen-demo-7d6459646d" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2024-05-26T08:35:35Z"
+    lastUpdateTime: "2024-05-26T08:35:35Z"
+    message: RolloutCompleted
+    reason: RolloutCompleted
+    status: "True"
+    type: Completed
+  - lastTransitionTime: "2024-05-26T08:35:36Z"
+    lastUpdateTime: "2024-05-26T08:35:36Z"
+    message: Rollout is healthy
+    reason: RolloutHealthy
+    status: "True"
+    type: Healthy
+  - lastTransitionTime: "2024-05-26T08:35:36Z"
+    lastUpdateTime: "2024-05-26T08:35:36Z"
+    message: Rollout is paused
+    reason: RolloutPaused
+    status: "False"
+    type: Paused
+  currentPodHash: 7d6459646d
+  observedGeneration: "3"
+  phase: Healthy
+  readyReplicas: 3
+  replicas: 3
+  selector: app=bluegreen-demo,rollouts-pod-template-hash=7d6459646d
+  stableRS: 7d6459646d
+  updatedReplicas: 3

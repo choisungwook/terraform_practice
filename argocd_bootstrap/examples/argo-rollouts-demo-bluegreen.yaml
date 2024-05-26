@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-rollouts-demo-bluegreen
+  namespace: argocd
+  annotations:
+    # <trigger name>.<service name>: ""
+    notifications.argoproj.io/subscribe.rollout-promote.devlake: ""
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: default
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: examples/blue-green
+    repoURL: 'https://github.com/argoproj/rollouts-demo.git'
+    targetRevision: HEAD
+  sources: []
+  project: default
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
