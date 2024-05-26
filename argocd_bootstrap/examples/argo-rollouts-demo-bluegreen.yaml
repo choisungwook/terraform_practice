@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
   annotations:
     # <trigger name>.<service name>: ""
-    notifications.argoproj.io/subscribe.on-rollout-completed.devlake: ""
+    notifications.argoproj.io/subscribe.on-rollout-completed.devlake: ''
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
