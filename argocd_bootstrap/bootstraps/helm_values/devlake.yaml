@@ -14,7 +14,7 @@ mysql:
 # config-ui pod and grafana pod
 ingress:
   enabled: true
-  ingressClassName: alb
+  className: alb
   hostname: devlake.choilab.xyz
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
