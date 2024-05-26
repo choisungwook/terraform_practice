@@ -19,7 +19,7 @@ dashboard:
 
 notifications:
   notifiers:
-    service.devlake: |
+    service.webhook.devlake: |
       url: https://devlake.choilab.xyz
       headers:
       - name: Authorization
