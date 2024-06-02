@@ -24,6 +24,14 @@ spec:
 
 ## kustomize로 설치
 
+1. argocd namespace 생성
+
+```sh
+kubectl create ns argocd
+```
+
+2. kusotmize 배포
+
 ```bash
 kubectl kustomize ./ | kubectl apply -f -
 ```
