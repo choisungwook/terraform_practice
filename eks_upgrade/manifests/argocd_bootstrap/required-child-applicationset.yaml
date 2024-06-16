@@ -11,7 +11,7 @@ spec:
         repoURL: 'public.ecr.aws/karpenter' # oci helm chart
         chart: karpenter
         targetRevision: '0.37.0'
-        valueFile: 'karpernter.yaml'
+        valueFile: 'karpenter.yaml'
         namespace: karpenter
   template:
     metadata:
