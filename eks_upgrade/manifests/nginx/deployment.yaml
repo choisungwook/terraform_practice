@@ -21,8 +21,8 @@ spec:
         # karpenter로 노드를 증설하기 위해 오버스펙 설정
         resources:
           limits:
-            memory: "64Mi"
-            cpu: "0.1"
+            memory: "512Mi"
+            cpu: "2"
         ports:
         - containerPort: 80
         lifecycle:
