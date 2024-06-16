@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: child-bootstrap
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: argo-rollouts
+        repoURL: 'https://argoproj.github.io/argo-helm'
+        chart: argo-rollouts
+        targetRevision: '2.35.3'
+        valueFile: 'argo-rollouts.yaml'
+        namespace: argo-rollouts
+  template:
+    metadata:
+      name: '{{name}}'
+    spec:
+      project: bootstrap
+      sources:
+      - repoURL: '{{repoURL}}'
+        targetRevision: '{{targetRevision}}'
+        chart: '{{chart}}'
+        helm:
+          valueFiles:
+          - '$values/argocd_bootstrap/bootstraps/helm_values/{{valueFile}}'
+      - repoURL: 'https://github.com/choisungwook/terraform_practice.git'
+        targetRevision: main
+        ref: values
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{namespace}}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        automated:
+          prune: true
+          selfHeal: true

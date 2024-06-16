@@ -7,12 +7,6 @@ spec:
   generators:
   - list:
       elements:
-      - name: grafana
-        repoURL: 'https://grafana.github.io/helm-charts'
-        chart: grafana
-        targetRevision: '7.3.11'
-        valueFile: 'grafana.yaml'
-        namespace: monitoring
       - name: argo-rollouts
         repoURL: 'https://argoproj.github.io/argo-helm'
         chart: argo-rollouts
