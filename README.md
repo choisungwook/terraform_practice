@@ -14,3 +14,4 @@
 * [step10. EKS 생성](./eks)
 * [ArgoCD EKS Bootstrap](./argocd_bootstrap/)
 * [Amazon prometheus와 EKS 연동](./eks/Amazon_prometheus.md)
+* [EKS in-place 업그레이드 예제](./eks_upgrade/)
