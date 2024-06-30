@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s3-ls
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: s3-ls
+  template:
+    metadata:
+      labels:
+        app: s3-ls
+    spec:
+      serviceAccountName: access-s3
+      containers:
+      - name: s3-ls
+        image: amazon/aws-cli
+        command: ["/bin/sh"]
+        args: ["-c", "while true; do aws s3 ls s3://sungwook-upgrade-eks && echo done; sleep 1; done"]
+        env:
+        - name: AWS_REGION
+          value: ap-northeast-2
