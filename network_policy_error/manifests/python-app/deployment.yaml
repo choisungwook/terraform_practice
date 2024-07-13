@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app-lazyboot
+  namespace: app
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: python-app-lazyboot
+  template:
+    metadata:
+      labels:
+        app: python-app-lazyboot
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: "kubernetes.io/hostname"
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: python-app-lazyboot
+      containers:
+      - image: choisunguk/fastapi_sleep:lazy_bootup_v4
+        imagePullPolicy: IfNotPresent
+        name: python-app-lazyboot
+        env:
+        - name: SLEEPTIME
+          value: "2"
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 8000
+          initialDelaySeconds: 20
+          periodSeconds: 3
+          failureThreshold: 2
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 3
+          failureThreshold: 2

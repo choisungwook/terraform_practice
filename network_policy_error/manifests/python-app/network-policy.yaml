@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: python-app-lazyboot
+  namespace: app
+spec:
+  podSelector:
+    matchLabels:
+      app: python-app-lazyboot
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: app
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: default
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: app
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: default

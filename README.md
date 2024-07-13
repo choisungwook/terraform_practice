@@ -15,3 +15,4 @@
 * [ArgoCD EKS Bootstrap](./argocd_bootstrap/)
 * [Amazon prometheus와 EKS 연동](./eks/Amazon_prometheus.md)
 * [EKS in-place 업그레이드 예제](./eks_upgrade/)
+* [EKS VPC CNI network policy 오류 재현](./network_policy_error/)
