@@ -42,14 +42,13 @@ module "eks" {
   source = "./module/eks"
 
   eks_cluster_name      = var.eks_cluster_name
-  eks_version           = "1.29"
-  oidc_provider_enabled = true
+  eks_version           = var.eks_version
+  oidc_provider_enabled = var.oidc_provider_enabled
 
   vpc_id                  = module.vpc.vpc_id
   private_subnets_ids     = module.vpc.private_subnets_ids
-  endpoint_private_access = true
-  # public_access가 false이면, terraform apply를 실행한 host가 private subnet이 접근 가능해야 합니다.
-  endpoint_public_access = true
+  endpoint_private_access = var.endpoint_private_access
+  endpoint_public_access  = var.endpoint_public_access
 
   # 아래 명령어를 실행하여 addon version을 설정하세요
   # aws eks describe-addon-versions --kubernetes-version {eks_verison} --addon-name {addon_name} --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
@@ -71,22 +70,10 @@ module "eks" {
       name                 = "coredns"
       version              = "v1.11.1-eksbuild.6"
       configuration_values = jsonencode({})
-
     }
   ]
 
-  managed_node_groups = {
-    "managed-node-group-a" = {
-      node_group_name = "managed-node-group-a",
-      instance_types  = ["t3.medium"],
-      capacity_type   = "SPOT",
-      release_version = "" #latest
-      disk_size       = 20
-      desired_size    = 3,
-      max_size        = 3,
-      min_size        = 3
-    }
-  }
+  managed_node_groups = var.managed_node_groups
 
   // IRSA role 생성 여부
   karpenter_enabled      = true
