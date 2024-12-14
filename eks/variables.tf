@@ -35,18 +35,8 @@ variable "managed_node_groups" {
     max_size        = number
     min_size        = number
   }))
-  default = {
-    "ondemand-group-a" = {
-      node_group_name = "ondemand-group-a",
-      instance_types  = ["t3.medium"],
-      capacity_type   = "SPOT",
-      release_version = "" #latest
-      disk_size       = 20
-      desired_size    = 3,
-      max_size        = 3,
-      min_size        = 3
-    }
-  }
+  # if you use EKS auto mode, you can set managed_node_groups = {}
+  default = {}
 }
 
 variable "assume_role_arn" {
@@ -57,6 +47,10 @@ variable "enable_amp" {
   type    = bool
   default = false
 }
+
+######################################################################
+# VPC
+######################################################################
 
 variable "vpc_cidr" {
   description = "VPC CIDR"
@@ -112,4 +106,24 @@ variable "private_subnets" {
       }
     }
   }
+}
+
+######################################################################
+# EKS auto mode
+
+# When using EKS Auto Mode compute_config.enabled, kubernetes_network_config.elastic_load_balancing.enabled, and storage_config.block_storage.enabled
+# must *ALL be set to true.
+# Likewise for disabling EKS Auto Mode, all three arguments must be set to false.
+######################################################################
+
+variable "auto_mode_enabled" {
+  description = "Enable EKS Auto Mode"
+  type        = bool
+  default     = false
+}
+
+variable "cluster_compute_config" {
+  description = "Configuration block for the cluster compute configuration"
+  type        = any
+  default     = {}
 }
