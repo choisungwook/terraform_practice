@@ -16,6 +16,11 @@ resource "aws_eks_node_group" "main" {
     min_size     = each.value["min_size"]
   }
 
+  launch_template {
+    id      = aws_launch_template.node_group[each.key].id
+    version = aws_launch_template.node_group[each.key].latest_version
+  }
+
   depends_on = [
     aws_eks_access_entry.cluster_admins,
     aws_iam_role_policy_attachment.node_group_AmazonEC2ContainerRegistryReadOnly,
@@ -23,4 +28,19 @@ resource "aws_eks_node_group" "main" {
     aws_iam_role_policy_attachment.node_group_AmazonEC2RoleforSSM,
     aws_iam_role_policy_attachment.node_group_AmazonEKS_CNI_Policy,
   ]
+}
+
+resource "aws_launch_template" "node_group" {
+  for_each = var.managed_node_groups
+
+  name = format("%s-eks-nodegroup-%s", aws_eks_cluster.main.name, each.value["node_group_name"])
+  block_device_mappings {
+    device_name = "/dev/xvda"
+    ebs {
+      volume_size           = 20
+      volume_type           = "gp3"
+      delete_on_termination = true
+      encrypted             = true
+    }
+  }
 }
