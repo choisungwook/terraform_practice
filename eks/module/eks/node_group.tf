@@ -6,7 +6,6 @@ resource "aws_eks_node_group" "main" {
   instance_types  = each.value["instance_types"]
   capacity_type   = each.value["capacity_type"]
   release_version = each.value["release_version"]
-  disk_size       = each.value["disk_size"]
   node_role_arn   = aws_iam_role.node_group_role.arn
   subnet_ids      = var.private_subnets_ids
 
