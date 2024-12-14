@@ -9,10 +9,47 @@ endpoint_public_access = true
 # Amazon Managed Prometheus 설치 여부
 enable_amp = false
 
+# VPC
+vpc_cidr = "10.0.0.0/16"
+
+public_subnets = {
+  "subnet_a1" = {
+    cidr = "10.0.10.0/24",
+    az   = "ap-northeast-2a",
+    tags = {
+      Name = "public-subnet-a1"
+    }
+  },
+  "subnet_b1" = {
+    cidr = "10.0.11.0/24",
+    az   = "ap-northeast-2c",
+    tags = {
+      Name = "public-subnet-c1"
+    }
+  }
+}
+
+private_subnets = {
+  "subnet_a1" = {
+    cidr = "10.0.100.0/24",
+    az   = "ap-northeast-2a",
+    tags = {
+      Name = "private-subnet-a1"
+    }
+  },
+  "subnet_b1" = {
+    cidr = "10.0.101.0/24",
+    az   = "ap-northeast-2c",
+    tags = {
+      Name = "private-subnet-c1"
+    }
+  }
+}
+
 # Managed Node Groups
 managed_node_groups = {
-  "managed-node-group-a" = {
-    node_group_name = "managed-node-group-a",
+  "ondemand-group-a" = {
+    node_group_name = "ondemand-group-a",
     instance_types  = ["t3.medium"],
     capacity_type   = "SPOT",
     release_version = "" #latest
