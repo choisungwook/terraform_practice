@@ -1,35 +1,24 @@
+######################################################################
+# EKS cluster role
+######################################################################
 resource "aws_iam_role" "eks_role" {
-  name = "${var.eks_cluster_name}-eks-cluster-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          Service = "eks.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
+  name               = "${var.eks_cluster_name}-eks-cluster-role"
+  assume_role_policy = data.aws_iam_policy_document.eks_cluster.json
 }
 
-resource "aws_iam_role" "node_group_role" {
-  name = "${var.eks_cluster_name}-eks-worker-node-role"
-
-  assume_role_policy = jsonencode({
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
-      },
+data "aws_iam_policy_document" "eks_cluster" {
+  statement {
+    sid = "EKSClusterAssumeRole"
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession",
     ]
-    Version = "2012-10-17"
-  })
+
+    principals {
+      type        = "Service"
+      identifiers = ["eks.amazonaws.com"]
+    }
+  }
 }
 
 resource "aws_iam_policy_attachment" "eks_cluster_policy" {
@@ -42,6 +31,54 @@ resource "aws_iam_policy_attachment" "eks_cluster_vpc_controller" {
   name       = "${var.eks_cluster_name}-AmazonEKSClusterPolicyAttachment"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
   roles      = [aws_iam_role.eks_role.name]
+}
+
+resource "aws_iam_policy_attachment" "eks_cluster_automode_storage" {
+  name       = "${var.eks_cluster_name}-AmazonEKSBlockStoragePolicy"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSBlockStoragePolicy"
+  roles      = [aws_iam_role.eks_role.name]
+}
+
+resource "aws_iam_policy_attachment" "eks_cluster_automode_compute" {
+  name       = "${var.eks_cluster_name}-AmazonEKSComputePolicy"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSComputePolicy"
+  roles      = [aws_iam_role.eks_role.name]
+}
+
+resource "aws_iam_policy_attachment" "eks_cluster_automode_loadbalancing" {
+  name       = "${var.eks_cluster_name}-AmazonEKSLoadBalancingPolicy"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSLoadBalancingPolicy"
+  roles      = [aws_iam_role.eks_role.name]
+}
+
+resource "aws_iam_policy_attachment" "eks_cluster_automode_networking" {
+  name       = "${var.eks_cluster_name}-AmazonEKSNetworkingPolicy"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSNetworkingPolicy"
+  roles      = [aws_iam_role.eks_role.name]
+}
+
+######################################################################
+# managed node group role
+######################################################################
+
+resource "aws_iam_role" "node_group_role" {
+  name               = "${var.eks_cluster_name}-eks-worker-node-role"
+  assume_role_policy = data.aws_iam_policy_document.node_group.json
+}
+
+data "aws_iam_policy_document" "node_group" {
+  statement {
+    sid = "EKSClusterAssumeRole"
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession",
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "node_group_AmazonEC2ContainerRegistryReadOnly" {
@@ -69,9 +106,9 @@ resource "aws_iam_role_policy_attachment" "node_group_CloudWatchAgentServerPolic
   role       = aws_iam_role.node_group_role.id
 }
 
-////
-// OIDC provider
-///
+######################################################################
+# OIDC provider
+######################################################################
 
 data "tls_certificate" "eks_oidc_cert" {
   count = var.oidc_provider_enabled ? 1 : 0
@@ -82,4 +119,46 @@ resource "aws_iam_openid_connect_provider" "main" {
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.eks_oidc_cert[0].certificates[0].sha1_fingerprint]
   url             = data.tls_certificate.eks_oidc_cert[0].url
+}
+
+# ######################################################################
+# # EKS auto Mode Node Role
+# ######################################################################
+
+resource "aws_iam_role" "eks_auto" {
+  count = var.auto_mode_enabled ? 1 : 0
+
+  name               = "${var.eks_cluster_name}-AmazonEKSAutoNodeRole"
+  assume_role_policy = data.aws_iam_policy_document.eks_auto[0].json
+}
+
+data "aws_iam_policy_document" "eks_auto" {
+  count = var.auto_mode_enabled ? 1 : 0
+
+  statement {
+    sid = "EKSAutoNodeAssumeRole"
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession",
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "eks_auto_AmazonEKSWorkerNodeMinimalPolicy" {
+  count = var.auto_mode_enabled ? 1 : 0
+
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodeMinimalPolicy"
+  role       = aws_iam_role.eks_auto[0].id
+}
+
+resource "aws_iam_role_policy_attachment" "eks_auto_AmazonEC2ContainerRegistryPullOnly" {
+  count = var.auto_mode_enabled ? 1 : 0
+
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPullOnly"
+  role       = aws_iam_role.eks_auto[0].id
 }

@@ -86,3 +86,40 @@ variable "enable_amp" {
   type    = bool
   default = false
 }
+
+variable "cluster_ip_family" {
+  description = "The IP family used to assign Kubernetes pod and service addresses. Valid values are `ipv4` (default) and `ipv6`. You can only specify an IP family when you create a cluster, changing this value will force a new cluster to be created"
+  type        = string
+  default     = "ipv4"
+}
+
+variable "cluster_service_ipv4_cidr" {
+  description = "The CIDR block to assign Kubernetes service IP addresses from. If you don't specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks"
+  type        = string
+  default     = null
+}
+
+variable "cluster_service_ipv6_cidr" {
+  description = "The CIDR block to assign Kubernetes pod and service IP addresses from if `ipv6` was specified when the cluster was created. Kubernetes assigns service addresses from the unique local address range (fc00::/7) because you can't specify a custom IPv6 CIDR block when you create the cluster"
+  type        = string
+  default     = null
+}
+
+######################################################################
+# EKS auto mode
+# When using EKS Auto Mode compute_config.enabled, kubernetes_network_config.elastic_load_balancing.enabled, and storage_config.block_storage.enabled
+# must *ALL be set to true.
+# Likewise for disabling EKS Auto Mode, all three arguments must be set to false.
+######################################################################
+
+variable "auto_mode_enabled" {
+  description = "Enable EKS Auto Mode"
+  type        = bool
+  default     = false
+}
+
+variable "cluster_compute_config" {
+  description = "Configuration block for the cluster compute configuration"
+  type        = any
+  default     = {}
+}

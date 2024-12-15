@@ -22,36 +22,41 @@ module "eks" {
 
   # 아래 명령어를 실행하여 addon version을 설정하세요
   # aws eks describe-addon-versions --kubernetes-version {eks_verison} --addon-name {addon_name} --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
-  eks_addons = [
-    # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-kube-proxy.html
-    {
-      name                 = "kube-proxy"
-      version              = "v1.29.0-eksbuild.3"
-      configuration_values = jsonencode({})
-    },
-    # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-vpc-cni.html
-    {
-      name                 = "vpc-cni"
-      version              = "v1.16.2-eksbuild.1"
-      configuration_values = jsonencode({})
-    },
-    # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-coredns.html
-    {
-      name                 = "coredns"
-      version              = "v1.11.1-eksbuild.6"
-      configuration_values = jsonencode({})
-    }
-  ]
+  # EKS auto mode를 사용하면 애드온 관리가 필요 없습니다.
+  # eks_addons = [
+  #   # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-kube-proxy.html
+  #   {
+  #     name                 = "kube-proxy"
+  #     version              = "v1.30.6-eksbuild.3"
+  #     configuration_values = jsonencode({})
+  #   },
+  #   # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-vpc-cni.html
+  #   {
+  #     name                 = "vpc-cni"
+  #     version              = "v1.19.0-eksbuild.1"
+  #     configuration_values = jsonencode({})
+  #   },
+  #   # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-coredns.html
+  #   {
+  #     name                 = "coredns"
+  #     version              = "v1.11.3-eksbuild.2"
+  #     configuration_values = jsonencode({})
+  #   }
+  # ]
 
   managed_node_groups = var.managed_node_groups
 
-  // IRSA role 생성 여부
+  # EKS auto mode
+  auto_mode_enabled      = var.auto_mode_enabled
+  cluster_compute_config = var.cluster_compute_config
+
+  # IRSA role 생성 여부
   karpenter_enabled      = true
   alb_controller_enabled = true
   external_dns_enabled   = true
   enable_amp             = var.enable_amp
 
-  // EKS access entry 설정
+  # EKS access entry 설정
   aws_auth_admin_roles = [
     var.assume_role_arn
   ]

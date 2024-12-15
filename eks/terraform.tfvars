@@ -1,5 +1,5 @@
 eks_cluster_name = "eks-from-terraform"
-eks_version      = "1.29"
+eks_version      = "1.30"
 
 # EKS 접근 유형
 endpoint_private_access = true
@@ -9,7 +9,27 @@ endpoint_public_access = true
 # Amazon Managed Prometheus 설치 여부
 enable_amp = false
 
+######################################################################
+# EKS auto Mode
+######################################################################
+
+auto_mode_enabled = true
+
+cluster_compute_config = {
+  enabled    = true
+  node_pools = ["general-purpose", "system"]
+}
+
+######################################################################
+# Managed Node Groups
+######################################################################
+
+managed_node_groups = {}
+
+######################################################################
 # VPC
+######################################################################
+
 vpc_cidr = "10.0.0.0/16"
 
 public_subnets = {
@@ -43,19 +63,5 @@ private_subnets = {
     tags = {
       Name = "private-subnet-c1"
     }
-  }
-}
-
-# Managed Node Groups
-managed_node_groups = {
-  "ondemand-group-a" = {
-    node_group_name = "ondemand-group-a",
-    instance_types  = ["t3.medium"],
-    capacity_type   = "SPOT",
-    release_version = "" #latest
-    disk_size       = 20
-    desired_size    = 3,
-    max_size        = 3,
-    min_size        = 3
   }
 }
