@@ -4,7 +4,7 @@ resource "aws_iam_role" "eks_karpenter_irsa" {
   name               = "${var.eks_cluster_name}-karpenter-irsa"
   assume_role_policy = data.aws_iam_policy_document.eks_karpenter_irsa_assume_role_policy[0].json
   tags = {
-    eks = "${var.eks_cluster_name}-irsa"
+    Name = "${var.eks_cluster_name}-karpenter-irsa"
   }
 }
 
@@ -106,7 +106,7 @@ resource "aws_iam_role" "eks_karpenter_fis" {
   name               = "${var.eks_cluster_name}-karpenter-fis"
   assume_role_policy = data.aws_iam_policy_document.eks_karpenter_fis_trust[0].json
   tags = {
-    eks = "${var.eks_cluster_name}-fis"
+    Name = "${var.eks_cluster_name}-karpenter-fis"
   }
 }
 

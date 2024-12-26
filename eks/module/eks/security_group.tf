@@ -21,6 +21,6 @@ resource "aws_security_group" "cluster" {
   }
 
   tags = {
-    Name = "terraform-eks-additional-SG"
+    Name = "${var.eks_cluster_name}-additional-SG"
   }
 }
