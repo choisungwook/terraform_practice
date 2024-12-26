@@ -2,7 +2,7 @@ resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 
   tags = {
-    Name = "terraform-eks"
+    Name = var.eks_cluster_name
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "terraform-eks"
+    Name = var.eks_cluster_name
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public["subnet_a1"].id
 
   tags = {
-    Name = "terraform-eks"
+    Name = var.eks_cluster_name
   }
 
   depends_on = [aws_internet_gateway.main]
@@ -60,7 +60,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "terraform-eks"
+    Name = var.eks_cluster_name
   }
 }
 
@@ -68,7 +68,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "terraform-eks"
+    Name = var.eks_cluster_name
   }
 }
 

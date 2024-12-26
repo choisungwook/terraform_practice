@@ -4,7 +4,7 @@ resource "aws_iam_role" "eks_external_dns_irsa" {
   name               = "${var.eks_cluster_name}-external-dns-irsa"
   assume_role_policy = data.aws_iam_policy_document.eks_external_dns_irsa_assume_role_policy[0].json
   tags = {
-    eks = "${var.eks_cluster_name}-irsa"
+    Name = "${var.eks_cluster_name}-external-dns-irsa"
   }
 }
 
