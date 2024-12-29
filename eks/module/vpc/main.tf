@@ -42,15 +42,22 @@ resource "aws_internet_gateway" "main" {
 }
 
 resource "aws_eip" "nat_gw" {
-  domain = "vpc"
+  for_each = aws_subnet.public
+  domain   = "vpc"
+
+  tags = {
+    Name = "${var.eks_cluster_name}-${each.key}"
+  }
 }
 
 resource "aws_nat_gateway" "main" {
-  allocation_id = aws_eip.nat_gw.id
-  subnet_id     = aws_subnet.public["subnet_a1"].id
+  for_each = aws_subnet.public
+
+  allocation_id = aws_eip.nat_gw[each.key].id
+  subnet_id     = each.value.id
 
   tags = {
-    Name = var.eks_cluster_name
+    Name = "${var.eks_cluster_name}-${each.key}"
   }
 
   depends_on = [aws_internet_gateway.main]
@@ -65,10 +72,12 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table" "private" {
+  for_each = aws_subnet.private
+
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = var.eks_cluster_name
+    Name = "${var.eks_cluster_name}-${each.key}"
   }
 }
 
@@ -86,14 +95,16 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_route" "nat_gw" {
-  route_table_id         = aws_route_table.private.id
+  for_each = aws_route_table.private
+
+  route_table_id         = each.value.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.main.id
+  nat_gateway_id         = aws_nat_gateway.main[replace(each.key, "private_", "public_")].id
 }
 
 resource "aws_route_table_association" "private" {
   for_each = aws_subnet.private
 
-  subnet_id      = each.value["id"]
-  route_table_id = aws_route_table.private.id
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.private[each.key].id
 }
