@@ -46,6 +46,7 @@ variable "managed_node_groups" {
     desired_size    = number
     max_size        = number
     min_size        = number
+    user_data       = optional(string)
   }))
 }
 
