@@ -20,6 +20,12 @@ resource "aws_eks_node_group" "main" {
     version = aws_launch_template.node_group[each.key].latest_version
   }
 
+  timeouts {
+    create = "5m"
+    update = "10m"
+    delete = "10m"
+  }
+
   depends_on = [
     aws_eks_access_entry.cluster_admins,
     aws_iam_role_policy_attachment.node_group_AmazonEC2ContainerRegistryReadOnly,
@@ -33,6 +39,9 @@ resource "aws_launch_template" "node_group" {
   for_each = var.managed_node_groups
 
   name = format("%s-eks-nodegroup-%s", aws_eks_cluster.main.name, each.value["node_group_name"])
+
+  user_data = each.value["user_data"]
+
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {

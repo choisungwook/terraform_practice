@@ -42,6 +42,13 @@ public_subnets = {
   },
   "subnet_b1" = {
     cidr = "10.0.11.0/24",
+    az   = "ap-northeast-2b",
+    tags = {
+      Name = "public-subnet-b1"
+    }
+  },
+  "subnet_c1" = {
+    cidr = "10.0.12.0/24",
     az   = "ap-northeast-2c",
     tags = {
       Name = "public-subnet-c1"
