@@ -61,6 +61,7 @@ variable "eks_addons" {
     name                 = string
     version              = string
     configuration_values = string
+    before_compute       = optional(bool, false)
   }))
   default = []
 }
