@@ -1,5 +1,5 @@
 eks_cluster_name = "eks-from-terraform"
-eks_version      = "1.30"
+eks_version      = "1.32"
 
 # EKS 접근 유형
 endpoint_private_access = true
