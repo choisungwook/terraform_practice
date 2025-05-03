@@ -23,26 +23,37 @@ module "eks" {
   # 아래 명령어를 실행하여 addon version을 설정하세요
   # aws eks describe-addon-versions --kubernetes-version {eks_verison} --addon-name {addon_name} --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
   # EKS auto mode를 사용하면 애드온 관리가 필요 없습니다.
-  # eks_addons = [
-  #   # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-kube-proxy.html
-  #   {
-  #     name                 = "kube-proxy"
-  #     version              = "v1.30.6-eksbuild.3"
-  #     configuration_values = jsonencode({})
-  #   },
-  #   # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-vpc-cni.html
-  #   {
-  #     name                 = "vpc-cni"
-  #     version              = "v1.19.0-eksbuild.1"
-  #     configuration_values = jsonencode({})
-  #   },
-  #   # https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-coredns.html
-  #   {
-  #     name                 = "coredns"
-  #     version              = "v1.11.3-eksbuild.2"
-  #     configuration_values = jsonencode({})
-  #   }
-  # ]
+  eks_addons = [
+    # Ref: https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-kube-proxy.html
+    # EKS 1.32 호환
+    {
+      name                 = "kube-proxy"
+      version              = "v1.32.0-eksbuild.2"
+      configuration_values = jsonencode({})
+    },
+    # Ref: https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-vpc-cni.html
+    # EKS 1.32 호환
+    {
+      name                 = "vpc-cni"
+      version              = "v1.19.2-eksbuild.5"
+      before_compute       = true
+      configuration_values = jsonencode({})
+    },
+    # Ref: https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/managing-coredns.html
+    # EKS 1.32 호환
+    {
+      name                 = "coredns"
+      version              = "v1.11.4-eksbuild.2"
+      configuration_values = jsonencode({})
+    },
+    # Ref: aws eks describe-addon-versions --addon-name metrics-server --kubernetes-version 1.32 --query "addons[].addonVersions[].addonVersion"
+    # # EKS 1.32 호환
+    {
+      name                 = "metrics-server"
+      version              = "v0.7.2-eksbuild.3"
+      configuration_values = jsonencode({})
+    }
+  ]
 
   managed_node_groups = var.managed_node_groups
 
