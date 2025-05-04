@@ -5,7 +5,9 @@ resource "aws_eks_node_group" "main" {
   node_group_name = each.value["node_group_name"]
   instance_types  = each.value["instance_types"]
   capacity_type   = each.value["capacity_type"]
-  release_version = each.value["release_version"]
+  # ami_id가 설정되면 release_version은 null로 설정됩니다.
+  release_version = each.value["ami_id"] == null ? each.value["release_version"] : null
+  ami_type        = each.value["ami_type"] != null ? each.value["ami_type"] : null
   node_role_arn   = aws_iam_role.node_group_role.arn
   subnet_ids      = var.private_subnets_ids
   labels          = each.value["labels"]
@@ -49,6 +51,9 @@ resource "aws_launch_template" "node_group" {
   for_each = var.managed_node_groups
 
   name = format("%s-eks-nodegroup-%s", aws_eks_cluster.main.name, each.value["node_group_name"])
+
+  # (optional) AMI_ID
+  image_id = each.value.ami_id
 
   user_data = each.value["user_data"]
 

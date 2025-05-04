@@ -41,7 +41,10 @@ variable "managed_node_groups" {
     node_group_name = string
     instance_types  = list(string)
     capacity_type   = string
-    release_version = string
+    # # Note: release_version might be ignored if ami_id is specified, depending on AWS behavior.
+    release_version = optional(string)
+    ami_type        = optional(string)
+    ami_id          = optional(string)
     disk_size       = number
     desired_size    = number
     max_size        = number

@@ -29,7 +29,9 @@ variable "managed_node_groups" {
     node_group_name = string
     instance_types  = list(string)
     capacity_type   = string
-    release_version = string
+    release_version = optional(string)
+    ami_id          = optional(string)
+    ami_type        = optional(string)
     disk_size       = number
     desired_size    = number
     max_size        = number
