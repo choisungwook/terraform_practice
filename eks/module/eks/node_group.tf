@@ -8,6 +8,16 @@ resource "aws_eks_node_group" "main" {
   release_version = each.value["release_version"]
   node_role_arn   = aws_iam_role.node_group_role.arn
   subnet_ids      = var.private_subnets_ids
+  labels          = each.value["labels"]
+
+  dynamic "taint" {
+    for_each = each.value["taints"]
+    content {
+      key    = taint.value.key
+      value  = taint.value.value
+      effect = taint.value.effect
+    }
+  }
 
   scaling_config {
     desired_size = each.value["desired_size"]

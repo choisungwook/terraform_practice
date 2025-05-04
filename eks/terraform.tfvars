@@ -24,7 +24,41 @@ cluster_compute_config = {
 # Managed Node Groups
 ######################################################################
 
-managed_node_groups = {}
+managed_node_groups = {
+  "managed-node-group-a" = {
+    node_group_name = "managed-node-group-a",
+    instance_types  = ["t3.medium"],
+    capacity_type   = "ON_DEMAND",
+    release_version = "1.32.3-20250501",
+    disk_size       = 20,
+    desired_size    = 1,
+    max_size        = 1,
+    min_size        = 1,
+    labels = {
+      "node-type" = "managed-node-group-a"
+    }
+  },
+  # "managed-node-group-b" = {
+  #   node_group_name = "managed-node-group-b",
+  #   instance_types  = ["t3.medium"],
+  #   capacity_type   = "ON_DEMAND",
+  #   release_version = "1.32.3-20250501",
+  #   disk_size       = 20,
+  #   desired_size    = 1,
+  #   max_size        = 1,
+  #   min_size        = 1,
+  #   labels         = {
+  #     "node-type" = "managed-node-group-b"
+  #   }
+  #   taints = [
+  #     {
+  #       key    = "node-type"
+  #       value  = "managed-node-group-b"
+  #       effect = "NO_SCHEDULE"
+  #     }
+  #   ]
+  # }
+}
 
 ######################################################################
 # VPC
