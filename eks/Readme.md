@@ -57,14 +57,34 @@ terraform plan
 terraform apply # 약 15~20분 소요
 ````
 
-# kube context 생성
+* kube context 생성
 
 ```bash
 # kubeconfig 생성
-aws eks update-kubeconfig --region ap-northeast-2 --name eks-from-terraform
+EKS_NAME=eks-from-terraform
+aws eks update-kubeconfig --region ap-northeast-2 --name $EKS_NAME
+```
 
+* kubectl 실행
+
+```sh
 # cluster 확인
+export AWS_PROFILE={AWS IAM role이 있는 profile}
 kubectl cluster-info
+```
+
+* AWS PROFILE은 아래처럼 설정되엉 있어야 합니다.
+
+```sh
+$ cat ~/.aws/config
+[default]
+region = ap-northeast-2
+output = json
+
+[profile eks]
+region = ap-northeast-2
+role_arn = {your iam role arn}
+source_profile = default
 ```
 
 # (옵션) Amazon prometheus를 사용하여 EKS 메트릭 수집
@@ -97,6 +117,7 @@ terrform destroy
 ```
 
 # 참고자료
+
 * terraform module 디버깅: https://thoeny.dev/how-to-debug-in-terraform
 * terraform splat: https://developer.hashicorp.com/terraform/language/expressions/splat
 * terraform eks overview: https://www.linkedin.com/pulse/eks-cluster-aws-day21-vijayabalan-balakrishnan/

@@ -35,6 +35,12 @@ variable "managed_node_groups" {
     max_size        = number
     min_size        = number
     user_data       = optional(string)
+    labels          = optional(map(string), {})
+    taints = optional(list(object({
+      key    = string
+      value  = string
+      effect = string
+    })), [])
   }))
   # if you use EKS auto mode, you can set managed_node_groups = {}
   default = {}
