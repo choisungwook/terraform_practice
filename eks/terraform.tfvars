@@ -38,6 +38,7 @@ managed_node_groups = {
       "node-type" = "managed-node-group-a"
     }
   },
+  # labels, taint 설정 예
   # "managed-node-group-b" = {
   #   node_group_name = "managed-node-group-b",
   #   instance_types  = ["t3.medium"],
@@ -57,7 +58,31 @@ managed_node_groups = {
   #       effect = "NO_SCHEDULE"
   #     }
   #   ]
-  # }
+  # },
+  # GPU 노드 예제
+  # "managed-node-group-gpu-a" = {
+  #   node_group_name = "managed-node-group-gpu-a",
+  #   instance_types  = ["g6.xlarge"],
+  #   capacity_type   = "ON_DEMAND",
+  #   # EKS nvidia GPU optimized AMI
+  #   release_version = "1.32.3-20250501",
+  #   ami_type      = "AL2023_x86_64_NVIDIA",
+  #   disk_size       = 20,
+  #   desired_size    = 1,
+  #   max_size        = 1,
+  #   min_size        = 1,
+  #   labels = {
+  #     "nvidia.com/gpu" = "true",
+  #     "node-type" = "managed-node-group-gpu-a"
+  #   }
+  #   taints = [
+  #     {
+  #       key    = "nvidia.com/gpu"
+  #       value  = "true"
+  #       effect = "NO_SCHEDULE"
+  #     }
+  #   ]
+  # },
 }
 
 ######################################################################
