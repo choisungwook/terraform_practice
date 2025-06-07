@@ -59,7 +59,9 @@ data "aws_iam_policy_document" "eks_alb_controller_irsa_policy" {
       "ec2:CreateSecurityGroup",
       "ec2:CreateTags",
       "ec2:DeleteTags",
-      "ec2:DeleteSecurityGroup"
+      "ec2:DeleteSecurityGroup",
+      # ref: https://github.com/kubernetes-sigs/aws-load-balancer-controller/releases/tag/v2.10.0
+      "ec2:GetSecurityGroupsForVpc",
     ]
     resources = ["*"]
   }
@@ -99,7 +101,16 @@ data "aws_iam_policy_document" "eks_alb_controller_irsa_policy" {
       "elasticloadbalancing:ModifyListener",
       "elasticloadbalancing:AddListenerCertificates",
       "elasticloadbalancing:RemoveListenerCertificates",
-      "elasticloadbalancing:ModifyRule"
+      "elasticloadbalancing:ModifyRule",
+      # ref: https://github.com/kubernetes-sigs/aws-load-balancer-controller/releases/tag/v2.9.0
+      "elasticloadbalancing:DescribeListenerAttributes",
+      "elasticloadbalancing:ModifyListenerAttributes",
+      # ref: # ref: https://github.com/kubernetes-sigs/aws-load-balancer-controller/releases/tag/v2.11.0
+      "elasticloadbalancing:DescribeCapacityReservation",
+      "elasticloadbalancing:ModifyCapacityReservation",
+      # ref: https://github.com/kubernetes-sigs/aws-load-balancer-controller/releases/tag/v2.12.0
+      "elasticloadbalancing:ModifyIpPools",
+      "elasticloadbalancing:SetRulePriorities",
     ]
     resources = ["*"]
   }
