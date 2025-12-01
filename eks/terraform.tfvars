@@ -1,9 +1,9 @@
 eks_cluster_name = "eks-from-terraform"
-eks_version      = "1.32"
+eks_version      = "1.34"
 
 # EKS 접근 유형
 endpoint_private_access = true
-# public_access가 false이면, terraform apply를 실행한 host가 private subnet이 접근 가능해야 합니다.
+# public_access가 false이면, terraform qapply를 실행한 host가 private subnet이 접근 가능해야 합니다.
 endpoint_public_access = true
 
 # Amazon Managed Prometheus 설치 여부
@@ -13,11 +13,12 @@ enable_amp = false
 # EKS auto Mode
 ######################################################################
 
-auto_mode_enabled = true
+auto_mode_enabled = false
 
 cluster_compute_config = {
-  enabled    = true
-  node_pools = ["general-purpose", "system"]
+  node_pools = [
+    # "general-purpose", "system"
+  ]
 }
 
 ######################################################################
@@ -28,14 +29,14 @@ managed_node_groups = {
   "managed-node-group-a" = {
     node_group_name = "managed-node-group-a",
     instance_types  = ["t3.medium"],
-    capacity_type   = "ON_DEMAND",
-    release_version = "1.32.3-20250501",
+    capacity_type   = "SPOT",
+    release_version = "1.34.2-20251120",
     disk_size       = 20,
-    desired_size    = 1,
-    max_size        = 1,
-    min_size        = 1,
+    desired_size    = 2,
+    max_size        = 2,
+    min_size        = 2,
     labels = {
-      "node-type" = "managed-node-group-a"
+      "node-type" = "managed-node-group-a-with-spot"
     }
   },
   # labels, taint 설정 예
@@ -43,7 +44,7 @@ managed_node_groups = {
   #   node_group_name = "managed-node-group-b",
   #   instance_types  = ["t3.medium"],
   #   capacity_type   = "ON_DEMAND",
-  #   release_version = "1.32.3-20250501",
+  #   release_version = "1.34.2-20251120",
   #   disk_size       = 20,
   #   desired_size    = 1,
   #   max_size        = 1,
@@ -65,7 +66,7 @@ managed_node_groups = {
   #   instance_types  = ["g6.xlarge"],
   #   capacity_type   = "ON_DEMAND",
   #   # EKS nvidia GPU optimized AMI
-  #   release_version = "1.32.3-20250501",
+  #   release_version = "1.34.2-20251120",
   #   ami_type      = "AL2023_x86_64_NVIDIA",
   #   disk_size       = 20,
   #   desired_size    = 1,

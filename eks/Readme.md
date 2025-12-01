@@ -18,10 +18,10 @@ export TF_VAR_assume_role_arn=""
 
 ## 2. EKS 버전 설정
 
-* terraform.tfvarfs에 eks_version 변수에 EKS 버전을 설정합니ㅏㄷ.
+* terraform.tfvars에 eks_version 변수에 EKS 버전을 설정합니다.
 
 ```sh
-eks_version = 1.32
+eks_version = 1.34
 ```
 
 ## 3. EKS addon 설정
