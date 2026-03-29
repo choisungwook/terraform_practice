@@ -25,32 +25,32 @@ module "eks" {
   # EKS auto mode를 사용하면 애드온 관리가 필요 없습니다.
   eks_addons = [
     # Ref: https://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html
-    # EKS 1.34 호환
+    # EKS 1.35 호환
     {
       name                 = "kube-proxy"
-      version              = "v1.34.1-eksbuild.2"
+      version              = "v1.35.2-eksbuild.4"
       configuration_values = jsonencode({})
     },
     # Ref: https://docs.aws.amazon.com/eks/latest/userguide/managing-vpc-cni.html
-    # EKS 1.34 호환
+    # EKS 1.35 호환
     {
       name                 = "vpc-cni"
-      version              = "v1.19.2-eksbuild.5"
+      version              = "v1.21.1-eksbuild.5"
       before_compute       = true
       configuration_values = jsonencode({})
     },
     # Ref: https://docs.aws.amazon.com/eks/latest/userguide/managing-coredns.html
-    # EKS 1.34 호환
+    # EKS 1.35 호환
     {
       name                 = "coredns"
-      version              = "v1.12.4-eksbuild.1"
+      version              = "v1.13.2-eksbuild.4"
       configuration_values = jsonencode({})
     },
-    # Ref: aws eks describe-addon-versions --addon-name metrics-server --kubernetes-version 1.34 --query "addons[].addonVersions[].addonVersion"
-    # EKS 1.34 호환
+    # Ref: aws eks describe-addon-versions --addon-name metrics-server --kubernetes-version 1.35 --query "addons[].addonVersions[].addonVersion"
+    # EKS 1.35 호환
     {
       name                 = "metrics-server"
-      version              = "v0.8.0-eksbuild.5"
+      version              = "v0.8.1-eksbuild.4"
       configuration_values = jsonencode({})
     }
   ]
