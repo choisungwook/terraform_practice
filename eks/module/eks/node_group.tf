@@ -79,6 +79,16 @@ resource "aws_launch_template" "node_group" {
     "--BOUNDARY--",
   ])) : each.value["user_data"]
 
+  dynamic "tag_specifications" {
+    for_each = each.value.name != null ? ["instance"] : []
+    content {
+      resource_type = "instance"
+      tags = {
+        Name = each.value.name
+      }
+    }
+  }
+
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
