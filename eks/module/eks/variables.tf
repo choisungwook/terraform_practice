@@ -41,7 +41,7 @@ variable "managed_node_groups" {
     node_group_name = string
     instance_types  = list(string)
     capacity_type   = string
-    # # Note: release_version might be ignored if ami_id is specified, depending on AWS behavior.
+    # Note: release_version might be ignored if ami_id is specified, depending on AWS behavior.
     release_version = optional(string)
     ami_type        = optional(string)
     ami_id          = optional(string)
@@ -50,6 +50,7 @@ variable "managed_node_groups" {
     max_size        = number
     min_size        = number
     user_data       = optional(string)
+    name            = optional(string)
     labels          = optional(map(string), {})
     taints = optional(list(object({
       key    = string
