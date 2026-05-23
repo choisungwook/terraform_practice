@@ -1,82 +1,41 @@
-# 개요
+# Terraform EKS Quick Start
 
-* 악분이 로컬에서 테스트용도로 사용하는 테라폼 EKS 모듈입니다. 테스트용도로만 사용하고 프로덕션에 사용하지 마세요.
-* 프로덕션은 EKS Blueprint 등을 사용하시길 바랍니다.
+## 개요
 
-# 준비
+이 저장소는 로컬 테스트용으로 사용하는 Terraform EKS 모듈입니다.
+처음 시작하는 사람이 EKS 클러스터를 빠르게 생성하고, kubeconfig를 설정한 뒤, 기본 동작을 확인하는 흐름을 기준으로 정리했습니다.
 
-## 1. AWS IAM role 준비
+프로덕션 환경에는 이 예제를 그대로 사용하지 마세요.
+프로덕션에서는 EKS Blueprints 같은 검증된 구성을 먼저 검토하는 것을 권장합니다.
 
-* 제가 만든 모듈은 EKS를 생성하고 관리할 AWS IAM role이 필요합니다.
-* AWS IAM role은 테라폼 변수 "assume_role_arn"로 관리합니다.
-* assume_role_arn에 설정할 IAM role은 환경변수로 설정할 수 있습니다.
+## TL;DR
 
-```bash
-# AWS profile
-export TF_VAR_assume_role_arn=""
-```
+- `TF_VAR_assume_role_arn`에 EKS를 생성할 AWS IAM role ARN을 설정합니다.
+- `terraform.tfvars`에서 `eks_cluster_name`과 `eks_version`을 확인합니다.
+- `main.tf`에서 `eks_addons`가 EKS 버전과 호환되는지 확인합니다.
+- `terraform init`, `terraform plan`, `terraform apply` 순서로 클러스터를 생성합니다.
+- `aws eks update-kubeconfig`로 kubeconfig를 생성한 뒤 `kubectl cluster-info`로 접속을 확인합니다.
 
-## 2. EKS 버전 설정
+## 준비
 
-* terraform.tfvars에 eks_version 변수에 EKS 버전을 설정합니다.
+### 1. AWS IAM role 준비
 
-```sh
-eks_version = 1.34
-```
+이 모듈은 EKS를 생성하고 관리할 AWS IAM role이 필요합니다.
+Terraform 변수 `assume_role_arn`에 해당 role ARN을 전달해야 합니다.
 
-## 3. EKS addon 설정
-
-* main.tf에 eks_addons 값을 설정합니다. EKS버전에 맞는 addons를 설정해야 합니다.
-* EKS addons은 생성/수정/삭제 timeout이 5분으로 설정되어 있습니다.
-
-> VPC CNI는 before_compute=true 옵션을 설정해주세요. VPC CNI는 노드 생성 후에 설치할 경우, hang이 걸릴 확률이 높습니다
-
-```sh
-eks_addons = [
-  {
-      name                 = "vpc-cni"
-      version              = "v1.19.2-eksbuild.5"
-      before_compute       = true
-      configuration_values = jsonencode({})
-    },
-]
-```
-
-## 4. EKs cluster 이름 설정
-
-* terraform.tfvars의 eks_cluster_name에 EKS 이름을 설정합니다.
-8 eks_cluster_name 변수는 AWS VPC subnet 등 리소스 tag에 설정됩니다.
-
-# EKS 생성방법
-
-* 테라폼 apply
+환경 변수로 설정하려면 아래처럼 입력합니다.
 
 ```bash
-terraform init
-terraform plan
-terraform apply # 약 15~20분 소요
-````
+export TF_VAR_assume_role_arn="{your iam role arn}"
+```
 
-* kube context 생성
+AWS CLI profile은 아래처럼 role을 AssumeRole 할 수 있어야 합니다.
 
 ```bash
-# kubeconfig 생성
-EKS_NAME=eks-from-terraform
-aws eks update-kubeconfig --region ap-northeast-2 --name $EKS_NAME
+cat ~/.aws/config
 ```
 
-* kubectl 실행
-
-```sh
-# cluster 확인
-export AWS_PROFILE={AWS IAM role이 있는 profile}
-kubectl cluster-info
-```
-
-* AWS PROFILE은 아래처럼 설정되엉 있어야 합니다.
-
-```sh
-$ cat ~/.aws/config
+```text
 [default]
 region = ap-northeast-2
 output = json
@@ -87,50 +46,133 @@ role_arn = {your iam role arn}
 source_profile = default
 ```
 
-# (옵션) Amazon prometheus를 사용하여 EKS 메트릭 수집
+### 2. EKS 클러스터 이름 설정
 
-1. 테라폼 변수에서 enable_amp를 true로 설정
-2. terraform apply(약 20분 소요)
-3. [문서](./Amazon_prometheus.md)를 참고하여 grafana<->Amazon proemtheus 연동
+`terraform.tfvars`에서 `eks_cluster_name`을 설정합니다.
+이 값은 EKS 이름과 AWS VPC subnet 등 관련 리소스 tag에 사용됩니다.
 
-# (옵션) EKS auto mode 활성화
+```hcl
+eks_cluster_name = "eks-from-terraform"
+```
 
-* EKS auto mode를 사용한다면, terraform.tfvars에서 auto_mode_enabled를 true로 설정합니다.
-* 그리고, main.tf에 있는 EKS addon 호환여부를 확인하세요. 만약 호환여부를 모른다면, 애드온을 설치하지 않은 것을 권장드립니다.
+### 3. EKS 버전 설정
 
-```sh
-# terraform.tfvars
+`terraform.tfvars`에서 `eks_version`을 설정합니다.
+
+```hcl
+eks_version = "1.34"
+```
+
+### 4. EKS addon 설정
+
+`main.tf`의 `eks_addons` 값을 확인합니다.
+EKS addon 버전은 EKS 클러스터 버전과 호환되어야 합니다.
+
+확인 필요: 현재 `terraform.tfvars`의 `eks_version`과 `main.tf`의 `eks_addons` 예시 버전이 같은 EKS minor version을 기준으로 맞춰져 있는지 적용 전에 다시 확인하세요.
+
+addon 버전은 아래 명령어로 확인할 수 있습니다.
+
+```bash
+aws eks describe-addon-versions \
+  --kubernetes-version {eks_version} \
+  --addon-name {addon_name} \
+  --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' \
+  --output table
+```
+
+VPC CNI는 node 생성 전에 설치되도록 `before_compute = true`를 설정하세요.
+node 생성 후에 VPC CNI를 설치하면 클러스터 생성이 멈추는 상황이 생길 수 있습니다.
+
+```hcl
+eks_addons = [
+  {
+    name                 = "vpc-cni"
+    version              = "v1.19.2-eksbuild.5"
+    before_compute       = true
+    configuration_values = jsonencode({})
+  },
+]
+```
+
+## EKS 생성 방법
+
+### 1. Terraform 실행
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+`terraform apply`는 약 15~20분 정도 걸릴 수 있습니다.
+
+### 2. kubeconfig 생성
+
+```bash
+export AWS_PROFILE=eks
+export EKS_NAME=eks-from-terraform
+
+aws eks update-kubeconfig --region ap-northeast-2 --name "$EKS_NAME"
+```
+
+### 3. kubectl 접속 확인
+
+```bash
+kubectl cluster-info
+```
+
+## 옵션
+
+### Amazon Managed Service for Prometheus로 EKS 메트릭 수집
+
+1. `terraform.tfvars`에서 `enable_amp`를 `true`로 설정합니다.
+2. `terraform apply`를 실행합니다. 약 20분 정도 걸릴 수 있습니다.
+3. [Amazon Managed Service for Prometheus 연동 문서](./Amazon_prometheus.md)를 참고해 Grafana와 Amazon Managed Service for Prometheus를 연동합니다.
+
+```hcl
+enable_amp = true
+```
+
+### EKS Auto Mode 활성화
+
+EKS Auto Mode를 사용하려면 `terraform.tfvars`에서 `auto_mode_enabled`를 `true`로 설정합니다.
+
+```hcl
 auto_mode_enabled = true
 ```
 
-```sh
-# main.tf
+EKS Auto Mode를 사용할 때는 `main.tf`의 `eks_addons` 호환 여부를 먼저 확인하세요.
+호환 여부를 확인하지 못했다면 addon을 직접 설치하지 않는 것을 권장합니다.
+
+```hcl
 eks_addons = [
   ...
 ]
 ```
 
-# 삭제 방법
+## 삭제 방법
+
+클러스터와 관련 리소스를 삭제하려면 아래 명령어를 실행합니다.
 
 ```bash
-terrform destroy
+terraform destroy
 ```
 
-# 참고자료
+## 참고자료
 
-* terraform module 디버깅: https://thoeny.dev/how-to-debug-in-terraform
-* terraform splat: https://developer.hashicorp.com/terraform/language/expressions/splat
-* terraform eks overview: https://www.linkedin.com/pulse/eks-cluster-aws-day21-vijayabalan-balakrishnan/
-* terraform eks overview: https://dev.to/aws-builders/how-to-build-eks-with-terraform-54pl
-* terraform eks overview: https://devpress.csdn.net/cicd/62ec845619c509286f4172fc.html
-* terraform eks additional security group: https://saturncloud.io/blog/terraform-additional-security-group-for-managed-nodes-in-eks-a-comprehensive-guide/
-* terraform eks aws-auth configmap: https://medium.com/@codingmaths/aws-eks-cluster-with-terraform-ebf0d2583f9a
-* terraform eks aws-auth configmap: https://dev.to/fukubaka0825/manage-eks-aws-auth-configmap-with-terraform-4ndp
-* terraform eks aws-auth configmap: https://github.com/cloudposse/terraform-aws-eks-cluster/blob/main/auth.tf
-* terraform eks aws-auth IAM role: https://medium.com/@radha.sable25/enabling-iam-users-roles-access-on-amazon-eks-cluster-f69b485c674f
-* terraform eks addons: https://dev.to/aws-builders/install-manage-amazon-eks-add-ons-with-terraform-2dea
-* terraform irsa: https://medium.com/@tech_18484/step-by-step-guide-creating-an-eks-cluster-with-terraform-resources-iam-roles-for-service-df1c5e389811
-* terraform aws_iam_policy_document: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment
-* migrate from aws-auth to access entry: https://fixit-xdu.medium.com/aws-eks-access-entry-4a7e25ed6c3a
-* migrate from aws-auth to access entry: https://opsinsights.dev/simplifying-access-entries-in-eks-a-guide
-* aws docs - accesss entry: https://docs.aws.amazon.com/eks/latest/userguide/migrating-access-entries.html
+- Terraform module 디버깅: https://thoeny.dev/how-to-debug-in-terraform
+- Terraform splat: https://developer.hashicorp.com/terraform/language/expressions/splat
+- Terraform EKS overview: https://www.linkedin.com/pulse/eks-cluster-aws-day21-vijayabalan-balakrishnan/
+- Terraform EKS overview: https://dev.to/aws-builders/how-to-build-eks-with-terraform-54pl
+- Terraform EKS overview: https://devpress.csdn.net/cicd/62ec845619c509286f4172fc.html
+- Terraform EKS additional security group: https://saturncloud.io/blog/terraform-additional-security-group-for-managed-nodes-in-eks-a-comprehensive-guide/
+- Terraform EKS aws-auth ConfigMap: https://medium.com/@codingmaths/aws-eks-cluster-with-terraform-ebf0d2583f9a
+- Terraform EKS aws-auth ConfigMap: https://dev.to/fukubaka0825/manage-eks-aws-auth-configmap-with-terraform-4ndp
+- Terraform EKS aws-auth ConfigMap: https://github.com/cloudposse/terraform-aws-eks-cluster/blob/main/auth.tf
+- Terraform EKS aws-auth IAM role: https://medium.com/@radha.sable25/enabling-iam-users-roles-access-on-amazon-eks-cluster-f69b485c674f
+- Terraform EKS addons: https://dev.to/aws-builders/install-manage-amazon-eks-add-ons-with-terraform-2dea
+- Terraform IRSA: https://medium.com/@tech_18484/step-by-step-guide-creating-an-eks-cluster-with-terraform-resources-iam-roles-for-service-df1c5e389811
+- Terraform aws_iam_policy_document: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment
+- Migrate from aws-auth to access entry: https://fixit-xdu.medium.com/aws-eks-access-entry-4a7e25ed6c3a
+- Migrate from aws-auth to access entry: https://opsinsights.dev/simplifying-access-entries-in-eks-a-guide
+- AWS Docs - access entry: https://docs.aws.amazon.com/eks/latest/userguide/migrating-access-entries.html

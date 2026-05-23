@@ -72,8 +72,22 @@ variable "eks_addons" {
     version              = string
     configuration_values = string
     before_compute       = optional(bool, false)
+    pod_identity_associations = optional(list(object({
+      role_arn        = string
+      service_account = string
+    })), [])
   }))
   default = []
+}
+
+variable "pod_identity_associations" {
+  description = "EKS Pod Identity associations for Kubernetes service accounts."
+  type = map(object({
+    namespace       = string
+    service_account = string
+    role_arn        = string
+  }))
+  default = {}
 }
 
 variable "karpenter_enabled" {
