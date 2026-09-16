@@ -133,6 +133,39 @@ kubectl cluster-info
 enable_amp = true
 ```
 
+### EKS control plane 설정
+
+[EKS advanced control plane](https://aws.amazon.com/ko/blogs/tech/eks-advanced-control-plane/) 기능을 `terraform.tfvars`에서 설정합니다.
+AWS provider `6.63` 이상이 필요합니다.
+
+| 변수 | 설명 |
+| --- | --- |
+| `control_plane_scaling_tier` | Provisioned control plane tier. `standard`, `tier-xl`, `tier-2xl`, `tier-4xl`, `tier-8xl` |
+| `kube_api_server_config` | event 보관 시간(`event_ttl`), NodePort 범위(`service_node_port_range`) |
+| `kube_controller_manager_config` | HPA sync 주기(`horizontal_pod_autoscaler_sync_period`), 종료된 pod GC 임계값(`terminated_pod_gc_threshold`) |
+| `kube_scheduler_config` | NodeResourcesFit scoring 전략(`scoring_strategy_type`)과 리소스 가중치(`scoring_resources`) |
+
+`kube_*` 변수를 `null`로 설정하면 EKS 기본값을 사용합니다.
+`horizontal_pod_autoscaler_sync_period`는 `tier-xl` 이상에서만 설정할 수 있으므로 `standard` tier에서는 `null`로 둡니다.
+
+pod를 적은 수의 node에 몰아서 배치(bin packing)하려면 `MostAllocated`를 사용합니다.
+
+```hcl
+kube_scheduler_config = {
+  scoring_strategy_type = "MostAllocated"
+  scoring_resources = [
+    {
+      name   = "cpu"
+      weight = 1
+    },
+    {
+      name   = "memory"
+      weight = 1
+    }
+  ]
+}
+```
+
 ### EKS Auto Mode 활성화
 
 EKS Auto Mode를 사용하려면 `terraform.tfvars`에서 `auto_mode_enabled`를 `true`로 설정합니다.

@@ -149,3 +149,52 @@ variable "cluster_compute_config" {
   type        = any
   default     = {}
 }
+
+######################################################################
+# EKS control plane
+# Ref: https://aws.amazon.com/ko/blogs/tech/eks-advanced-control-plane/
+######################################################################
+
+variable "control_plane_scaling_tier" {
+  description = "Provisioned control plane tier. standard, tier-xl, tier-2xl, tier-4xl, tier-8xl"
+  type        = string
+  default     = "standard"
+
+  validation {
+    condition     = contains(["standard", "tier-xl", "tier-2xl", "tier-4xl", "tier-8xl"], var.control_plane_scaling_tier)
+    error_message = "control_plane_scaling_tier must be one of standard, tier-xl, tier-2xl, tier-4xl, tier-8xl."
+  }
+}
+
+variable "kube_api_server_config" {
+  description = "kube-apiserver settings. null uses EKS defaults"
+  type = object({
+    event_ttl = optional(string)
+    service_node_port_range = optional(object({
+      min_port = number
+      max_port = number
+    }))
+  })
+  default = null
+}
+
+variable "kube_controller_manager_config" {
+  description = "kube-controller-manager settings. null uses EKS defaults. horizontal_pod_autoscaler_sync_period requires tier-xl or higher"
+  type = object({
+    horizontal_pod_autoscaler_sync_period = optional(string)
+    terminated_pod_gc_threshold           = optional(number)
+  })
+  default = null
+}
+
+variable "kube_scheduler_config" {
+  description = "kube-scheduler NodeResourcesFit settings. null uses EKS defaults. scoring_strategy_type is LeastAllocated or MostAllocated"
+  type = object({
+    scoring_strategy_type = string
+    scoring_resources = optional(list(object({
+      name   = string
+      weight = number
+    })), [])
+  })
+  default = null
+}

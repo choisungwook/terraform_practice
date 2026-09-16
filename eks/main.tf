@@ -71,6 +71,12 @@ module "eks" {
   aws_auth_admin_roles = [
     var.assume_role_arn
   ]
+
+  # EKS control plane
+  control_plane_scaling_tier     = var.control_plane_scaling_tier
+  kube_api_server_config         = var.kube_api_server_config
+  kube_controller_manager_config = var.kube_controller_manager_config
+  kube_scheduler_config          = var.kube_scheduler_config
 }
 
 data "local_file" "managed_prometheus_config" {

@@ -56,4 +56,68 @@ resource "aws_eks_cluster" "main" {
       }
     }
   }
+
+  control_plane_scaling_config {
+    tier = var.control_plane_scaling_tier
+  }
+
+  dynamic "kube_api_server_config" {
+    for_each = var.kube_api_server_config == null ? [] : [var.kube_api_server_config]
+
+    content {
+      event_ttl = kube_api_server_config.value.event_ttl
+
+      dynamic "service_node_port_range" {
+        for_each = kube_api_server_config.value.service_node_port_range == null ? [] : [kube_api_server_config.value.service_node_port_range]
+
+        content {
+          min_port = service_node_port_range.value.min_port
+          max_port = service_node_port_range.value.max_port
+        }
+      }
+    }
+  }
+
+  dynamic "kube_controller_manager_config" {
+    for_each = var.kube_controller_manager_config == null ? [] : [var.kube_controller_manager_config]
+
+    content {
+      dynamic "horizontal_pod_autoscaler_controller_config" {
+        for_each = kube_controller_manager_config.value.horizontal_pod_autoscaler_sync_period == null ? [] : [1]
+
+        content {
+          horizontal_pod_autoscaler_sync_period = kube_controller_manager_config.value.horizontal_pod_autoscaler_sync_period
+        }
+      }
+
+      dynamic "pod_gc_controller_config" {
+        for_each = kube_controller_manager_config.value.terminated_pod_gc_threshold == null ? [] : [1]
+
+        content {
+          terminated_pod_gc_threshold = kube_controller_manager_config.value.terminated_pod_gc_threshold
+        }
+      }
+    }
+  }
+
+  dynamic "kube_scheduler_config" {
+    for_each = var.kube_scheduler_config == null ? [] : [var.kube_scheduler_config]
+
+    content {
+      node_resources_fit {
+        scoring_strategy {
+          type = kube_scheduler_config.value.scoring_strategy_type
+
+          dynamic "resource" {
+            for_each = kube_scheduler_config.value.scoring_resources
+
+            content {
+              name   = resource.value.name
+              weight = resource.value.weight
+            }
+          }
+        }
+      }
+    }
+  }
 }

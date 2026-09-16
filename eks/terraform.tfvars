@@ -10,6 +10,50 @@ endpoint_public_access = true
 enable_amp = false
 
 ######################################################################
+# EKS control plane
+# Ref: https://aws.amazon.com/ko/blogs/tech/eks-advanced-control-plane/
+######################################################################
+
+# Provisioned control plane tier: standard, tier-xl, tier-2xl, tier-4xl, tier-8xl
+# standard 외 tier는 추가 요금이 발생합니다.
+control_plane_scaling_tier = "standard"
+
+# kube-apiserver
+# event_ttl: 10m ~ 60m, service_node_port_range: 10260 ~ 32767
+kube_api_server_config = {
+  event_ttl = "1h"
+  service_node_port_range = {
+    min_port = 30000
+    max_port = 32767
+  }
+}
+
+# kube-controller-manager
+# horizontal_pod_autoscaler_sync_period: 10s ~ 15s, tier-xl 이상에서만 설정 가능 (standard는 null)
+# terminated_pod_gc_threshold: 0 ~ 12500
+kube_controller_manager_config = {
+  horizontal_pod_autoscaler_sync_period = null
+  terminated_pod_gc_threshold           = 12500
+}
+
+# kube-scheduler NodeResourcesFit
+# scoring_strategy_type: LeastAllocated(분산 배치) 또는 MostAllocated(bin packing)
+# scoring_resources weight: 1 ~ 100
+kube_scheduler_config = {
+  scoring_strategy_type = "LeastAllocated"
+  scoring_resources = [
+    {
+      name   = "cpu"
+      weight = 1
+    },
+    {
+      name   = "memory"
+      weight = 1
+    }
+  ]
+}
+
+######################################################################
 # EKS auto Mode
 ######################################################################
 
