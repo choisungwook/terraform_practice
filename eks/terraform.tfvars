@@ -1,5 +1,5 @@
 eks_cluster_name = "eks-from-terraform"
-eks_version      = "1.34"
+eks_version      = "1.36"
 
 # EKS 접근 유형
 endpoint_private_access = true
@@ -74,7 +74,7 @@ managed_node_groups = {
     node_group_name = "managed-node-group-a",
     instance_types  = ["t3.medium"],
     capacity_type   = "SPOT",
-    release_version = "1.34.2-20251120",
+    release_version = "1.36.4-20260917",
     disk_size       = 20,
     desired_size    = 2,
     max_size        = 2,
@@ -88,7 +88,7 @@ managed_node_groups = {
   #   node_group_name = "managed-node-group-b",
   #   instance_types  = ["t3.medium"],
   #   capacity_type   = "ON_DEMAND",
-  #   release_version = "1.34.2-20251120",
+  #   release_version = "1.36.4-20260917",
   #   disk_size       = 20,
   #   desired_size    = 1,
   #   max_size        = 1,
@@ -110,7 +110,7 @@ managed_node_groups = {
   #   instance_types  = ["g6.xlarge"],
   #   capacity_type   = "ON_DEMAND",
   #   # EKS nvidia GPU optimized AMI
-  #   release_version = "1.34.2-20251120",
+  #   release_version = "1.36.4-20260917",
   #   ami_type      = "AL2023_x86_64_NVIDIA",
   #   disk_size       = 20,
   #   desired_size    = 1,
