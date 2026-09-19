@@ -60,7 +60,7 @@ eks_cluster_name = "eks-from-terraform"
 `terraform.tfvars`에서 `eks_version`을 설정합니다.
 
 ```hcl
-eks_version = "1.34"
+eks_version = "1.36"
 ```
 
 ### 4. EKS addon 설정
